@@ -11,7 +11,6 @@ DANAin adalah platform crowdfunding yang menghubungkan startup dan pengelola pro
 - [Penggunaan Aplikasi](#penggunaan-aplikasi)
 - [API Endpoints](#api-endpoints)
 - [Model Database](#model-database)
-- [Kontributor](#kontributor)
 - [Lisensi](#lisensi)
 
 ## 🌟 Fitur Utama
