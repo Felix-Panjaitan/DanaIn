@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kebijakan Privasi - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0a192f;
+        color: #e0e6f1;
+      }
+      .top-navbar {
+        background-color: #0a192f;
+        border-bottom: 1px solid #1e2d3d;
+        height: 4.5rem;
+      }
+      .top-navbar-link {
+        color: #a8b2d1;
+        transition: color 0.2s ease;
+      }
+      .top-navbar-link:hover,
+      .top-navbar-link.active {
+        color: #64ffda;
+      }
+      .top-navbar-link.active {
+        font-weight: 600;
+      }
+
+      .btn-primary {
+        background-color: #64ffda;
+        color: #0a192f;
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .btn-primary:hover {
+        background-color: #52d3c8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+      }
+      .btn-secondary {
+        background-color: #1e2d3d;
+        color: #a8b2d1;
+        border: 1px solid #3e4c5b;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-color 0.3s ease;
+      }
+      .btn-secondary:hover {
+        background-color: #3e4c5b;
+        border-color: #64ffda;
+        color: #64ffda;
+      }
+      .footer-bg {
+        background-color: #081424;
+        border-top: 1px solid #1e2d3d;
+      }
+      .content-container {
+        background-color: #102a43;
+        border: 1px solid #1e2d3d;
+        border-radius: 8px;
+        padding: 24px 32px;
+        margin-top: 32px;
+        margin-bottom: 32px;
+      }
+      .content-container h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ccd6f6;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #1e2d3d;
+      }
+      .content-container h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #e0e6f1;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .content-container p,
+      .content-container ul li {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #a8b2d1;
+        margin-bottom: 1rem;
+      }
+      .content-container ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+      }
+      .content-container a {
+        color: #64ffda;
+        text-decoration: underline;
+      }
+      .content-container a:hover {
+        color: #52d3c8;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
+        const loggedInUserName =
+          localStorage.getItem("loggedInUserName") || "Pengguna";
+        const userRole = localStorage.getItem("userRole") || "startup";
+
+        const topNavAuthLinksDesktop = document.getElementById(
+          "topNavAuthLinksDesktop"
+        );
+        const topNavUserSectionDesktop = document.getElementById(
+          "topNavUserSectionDesktop"
+        );
+        const topNavAuthLinksMobile = document.getElementById(
+          "topNavAuthLinksMobile"
+        );
+        const topNavUserSectionMobile = document.getElementById(
+          "topNavUserSectionMobile"
+        );
+        const dashboardLink = document.getElementById("dashboardLink");
+        const mobileDashboardLink = document.getElementById(
+          "mobileDashboardLink"
+        );
+
+        const dashboardUrl =
+          userRole === "investor"
+            ? "dashboard-investor.html"
+            : "dashboard-startup.html";
+        if (dashboardLink) dashboardLink.href = dashboardUrl;
+        if (mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+        if (isUserLoggedIn === "true") {
+          if (topNavAuthLinksDesktop)
+            topNavAuthLinksDesktop.style.display = "none";
+          if (topNavUserSectionDesktop) {
+            topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+            topNavUserSectionDesktop.classList.remove("hidden");
+            topNavUserSectionDesktop.classList.add("flex", "items-center");
+            setupLogoutButton("logoutButtonTopDesktop");
+          }
+          if (topNavAuthLinksMobile)
+            topNavAuthLinksMobile.style.display = "none";
+          if (topNavUserSectionMobile) {
+            topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+            topNavUserSectionMobile.classList.remove("hidden");
+            setupLogoutButton("logoutButtonTopMobile");
+          }
+        } else {
+          if (topNavAuthLinksDesktop)
+            topNavAuthLinksDesktop.style.display = "flex";
+          if (topNavUserSectionDesktop)
+            topNavUserSectionDesktop.classList.add("hidden");
+          if (topNavAuthLinksMobile)
+            topNavAuthLinksMobile.style.display = "block";
+          if (topNavUserSectionMobile)
+            topNavUserSectionMobile.classList.add("hidden");
+        }
+
+        function setupLogoutButton(buttonId) {
+          const logoutButton = document.getElementById(buttonId);
+          if (logoutButton) {
+            logoutButton.addEventListener("click", function (e) {
+              e.preventDefault();
+              localStorage.removeItem("isUserLoggedIn");
+              localStorage.removeItem("loggedInUserName");
+              localStorage.removeItem("userRole");
+              localStorage.removeItem("demoUserEmail");
+              localStorage.removeItem("demoUserPassword");
+              localStorage.removeItem("demoUserUsername");
+              window.location.href = "index.html";
+            });
+          }
+        }
+
+        const topMobileMenuButton = document.getElementById(
+          "topMobileMenuButton"
+        );
+        const topMobileMenu = document.getElementById("topMobileMenu");
+        if (topMobileMenuButton && topMobileMenu) {
+          topMobileMenuButton.addEventListener("click", function () {
+            topMobileMenu.classList.toggle("hidden");
+          });
+          document.addEventListener("click", function (event) {
+            if (
+              !topMobileMenuButton.contains(event.target) &&
+              !topMobileMenu.contains(event.target)
+            ) {
+              topMobileMenu.classList.add("hidden");
+            }
+          });
+        }
+
+        const currentYearFooter = document.getElementById("currentYearFooter");
+        if (currentYearFooter)
+          currentYearFooter.textContent = new Date().getFullYear();
+      });
+    </script>
+
+    <header class="top-navbar sticky top-0 z-50">
+      <nav
+        class="container mx-auto px-6 h-full flex justify-between items-center"
+      >
+        <a
+          href="index.html"
+          class="text-3xl font-extrabold"
+          style="color: #64ffda"
+          >DANAIN</a
+        >
+        <div class="hidden md:flex space-x-6 items-center">
+          <a href="daftar-proyek.html" class="top-navbar-link"
+            >Telusuri Proyek</a
+          >
+          <a href="#" id="dashboardLink" class="top-navbar-link"
+            >Dashboard Saya</a
+          >
+          <a href="tentang-kami.html" class="top-navbar-link">Tentang Kami</a>
+          <a href="index.html#faq" class="top-navbar-link">FAQ</a>
+          <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+          <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+            <a
+              href="auth.html#login"
+              class="btn-secondary px-4 py-2 rounded-md text-sm"
+              >Masuk</a
+            >
+            <a
+              href="auth.html#signup"
+              class="btn-primary px-4 py-2 rounded-md text-sm font-semibold"
+              >Daftar</a
+            >
+          </div>
+        </div>
+        <div class="md:hidden">
+          <button
+            id="topMobileMenuButton"
+            class="text-gray-300 hover:text-white focus:outline-none"
+          >
+            <i class="fas fa-ellipsis-v text-xl"></i>
+          </button>
+        </div>
+      </nav>
+      <div
+        id="topMobileMenu"
+        class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg"
+      >
+        <a
+          href="daftar-proyek.html"
+          class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+          >Telusuri Proyek</a
+        >
+        <a
+          href="#"
+          id="mobileDashboardLink"
+          class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+          >Dashboard Saya</a
+        >
+        <a
+          href="tentang-kami.html"
+          class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+          >Tentang Kami</a
+        >
+        <a
+          href="index.html#faq"
+          class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+          >FAQ</a
+        >
+        <div
+          id="topNavUserSectionMobile"
+          class="hidden border-t border-gray-700 mt-2 pt-2"
+        ></div>
+        <div
+          id="topNavAuthLinksMobile"
+          class="border-t border-gray-700 mt-2 pt-2"
+        >
+          <a
+            href="auth.html#login"
+            class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+            >Masuk</a
+          >
+          <a
+            href="auth.html#signup"
+            class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold"
+            >Daftar</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-100">
+          Kebijakan Privasi
+        </h1>
+        <p class="text-lg text-gray-400 mt-2">
+          Terakhir diperbarui: 3 Juni 2025
+        </p>
+      </div>
+
+      <article class="content-container max-w-4xl mx-auto">
+        <h2>Pendahuluan</h2>
+        <p>
+          Selamat datang di DANAIN ("kami", "milik kami", atau "kita"). Kami
+          berkomitmen untuk melindungi privasi informasi pribadi Anda. Kebijakan
+          Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan,
+          mengungkapkan, dan melindungi informasi Anda ketika Anda mengunjungi
+          platform kami.
+        </p>
+
+        <h2>Informasi yang Kami Kumpulkan</h2>
+        <p>
+          Kami dapat mengumpulkan informasi pribadi tentang Anda dengan berbagai
+          cara, termasuk:
+        </p>
+        <ul>
+          <li>
+            <strong>Informasi yang Anda Berikan Secara Langsung:</strong> Ini
+            termasuk informasi yang Anda berikan saat mendaftar akun, membuat
+            profil, mengajukan proyek, melakukan investasi, atau berkomunikasi
+            dengan kami. Contohnya termasuk nama, alamat email, nomor telepon,
+            detail proyek, dan informasi keuangan (untuk transaksi).
+          </li>
+          <li>
+            <strong>Informasi yang Dikumpulkan Secara Otomatis:</strong> Saat
+            Anda mengakses Platform, kami dapat secara otomatis mengumpulkan
+            informasi tertentu tentang perangkat Anda dan aktivitas
+            penjelajahan, seperti alamat IP, jenis browser, sistem operasi,
+            halaman yang Anda kunjungi, dan waktu akses.
+          </li>
+          <li>
+            <strong>Informasi dari Pihak Ketiga:</strong> Kami mungkin menerima
+            informasi tentang Anda dari sumber pihak ketiga, seperti mitra
+            verifikasi identitas atau layanan analitik.
+          </li>
+        </ul>
+
+        <h2>Bagaimana Kami Menggunakan Informasi Anda</h2>
+        <p>
+          Kami dapat menggunakan informasi yang kami kumpulkan untuk berbagai
+          tujuan, termasuk:
+        </p>
+        <ul>
+          <li>Menyediakan, mengoperasikan, dan memelihara Platform kami.</li>
+          <li>Memproses pendaftaran akun Anda dan mengelola akun Anda.</li>
+          <li>Memfasilitasi pengajuan proyek dan proses investasi.</li>
+          <li>
+            Memproses transaksi dan mengirimkan informasi terkait, seperti
+            konfirmasi dan faktur.
+          </li>
+          <li>Meningkatkan, mempersonalisasi, dan memperluas Platform kami.</li>
+          <li>
+            Memahami dan menganalisis bagaimana Anda menggunakan Platform kami.
+          </li>
+          <li>
+            Mengembangkan produk, layanan, fitur, dan fungsionalitas baru.
+          </li>
+          <li>
+            Berkomunikasi dengan Anda, baik secara langsung maupun melalui salah
+            satu mitra kami, termasuk untuk layanan pelanggan, untuk memberi
+            Anda pembaruan dan informasi lain yang berkaitan dengan Platform,
+            dan untuk tujuan pemasaran dan promosi (dengan persetujuan Anda jika
+            diperlukan).
+          </li>
+          <li>Mengirimkan email kepada Anda.</li>
+          <li>Menemukan dan mencegah penipuan.</li>
+        </ul>
+
+        <h2>Bagaimana Kami Membagikan Informasi Anda</h2>
+        <p>
+          Kami tidak akan menjual atau menyewakan informasi pribadi Anda kepada
+          pihak ketiga. Kami dapat membagikan informasi Anda dalam situasi
+          berikut:
+        </p>
+        <ul>
+          <li>
+            <strong>Dengan Penyedia Layanan:</strong> Kami dapat membagikan
+            informasi Anda dengan vendor pihak ketiga, penyedia layanan,
+            kontraktor, atau agen yang melakukan layanan untuk kami atau atas
+            nama kami dan memerlukan akses ke informasi tersebut untuk melakukan
+            pekerjaan itu.
+          </li>
+          <li>
+            <strong>Untuk Transfer Bisnis:</strong> Jika kami terlibat dalam
+            merger, akuisisi, pembiayaan uji tuntas, reorganisasi, kebangkrutan,
+            kurator, penjualan aset perusahaan, atau transisi layanan ke
+            penyedia lain, informasi Anda dapat dijual atau ditransfer sebagai
+            bagian dari transaksi tersebut sebagaimana diizinkan oleh hukum
+            dan/atau kontrak.
+          </li>
+          <li>
+            <strong>Dengan Persetujuan Anda:</strong> Kami dapat mengungkapkan
+            informasi pribadi Anda untuk tujuan lain apa pun dengan persetujuan
+            Anda.
+          </li>
+          <li>
+            <strong>Untuk Kepatuhan Hukum:</strong> Kami dapat mengungkapkan
+            informasi Anda jika kami diharuskan melakukannya oleh hukum atau
+            sebagai tanggapan atas permintaan yang sah oleh otoritas publik
+            (misalnya, pengadilan atau lembaga pemerintah).
+          </li>
+        </ul>
+
+        <h2>Keamanan Informasi Anda</h2>
+        <p>
+          Kami menggunakan langkah-langkah keamanan administratif, teknis, dan
+          fisik yang wajar untuk melindungi informasi pribadi Anda. Namun, harap
+          diingat bahwa tidak ada transmisi melalui internet atau metode
+          penyimpanan elektronik yang 100% aman dan kami tidak dapat menjamin
+          keamanan mutlaknya.
+        </p>
+
+        <h2>Hak Privasi Anda</h2>
+        <p>
+          Tergantung pada lokasi Anda, Anda mungkin memiliki hak tertentu
+          terkait informasi pribadi Anda, seperti hak untuk mengakses,
+          memperbaiki, atau menghapus informasi pribadi Anda. Untuk menggunakan
+          hak ini, silakan hubungi kami.
+        </p>
+
+        <h2>Perubahan pada Kebijakan Privasi Ini</h2>
+        <p>
+          Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Kami
+          akan memberitahu Anda tentang perubahan apa pun dengan memposting
+          Kebijakan Privasi baru di halaman ini. Anda disarankan untuk meninjau
+          Kebijakan Privasi ini secara berkala untuk setiap perubahan. Perubahan
+          pada Kebijakan Privasi ini efektif ketika diposting di halaman ini.
+        </p>
+
+        <h2>Kontak Kami</h2>
+        <p>
+          Jika Anda memiliki pertanyaan atau kekhawatiran tentang Kebijakan
+          Privasi ini, silakan hubungi kami di [alamat email kontak placeholder,
+          misal: privacy@danain.com].
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+      <div class="container mx-auto px-6 text-center">
+        <p>
+          © <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta
+          Dilindungi.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

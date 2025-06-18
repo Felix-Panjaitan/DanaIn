@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danain - Autentikasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(100, 255, 218, 0.05) 0%, transparent 30%),
+                        radial-gradient(circle at top right, rgba(100, 255, 218, 0.03) 0%, transparent 40%);
+            animation: subtleShine 25s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes subtleShine {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, 10px) rotate(5deg); }
+            50% { transform: translate(-10px, -10px) rotate(-5deg); }
+            75% { transform: translate(10px, -10px) rotate(3deg); }
+        }
+
+        .auth-container {
+            background-color: #102A43; 
+            border: 1px solid #1E2D3D; 
+            border-radius: 16px; 
+            padding: 40px 40px 50px; 
+            width: 100%;
+            max-width: 420px; 
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+            animation: slideInUp 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .back-to-home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #A8B2D1;
+            font-size: 14px;
+            text-decoration: none;
+            margin-bottom: 25px; 
+            transition: color 0.3s ease;
+            position: absolute; 
+            top: 20px;
+            left: 30px;
+        }
+
+        .back-to-home-link:hover {
+            color: #64FFDA;
+        }
+
+        .back-to-home-link svg {
+            width: 18px; 
+            height: 18px;
+        }
+
+        .logo-text {
+            font-size: 36px;
+            font-weight: 800;
+            color: #64FFDA; 
+            margin-bottom: 30px;
+            margin-top: 30px; 
+            letter-spacing: -0.5px;
+        }
+        
+        .form-title { 
+            color: #CCD6F6; 
+            font-size: 24px; 
+            font-weight: 600; 
+            margin-bottom: 35px;
+            transition: all 0.3s ease;
+        }
+
+        .form-container {
+            position: relative;
+            overflow: hidden;
+            min-height: 280px; 
+        }
+        
+        .auth-container.signup-mode .form-container {
+            min-height: 490px; 
+        }
+
+        .form-slide {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width:100%; 
+        }
+
+        .form-slide.hidden {
+            opacity: 0;
+            transform: translateX(40px); 
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+        .form-slide.hidden-left { 
+            opacity: 0;
+            transform: translateX(-40px);
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: left; 
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 18px;
+            background-color: #0A192F; 
+            border: 1px solid #1E2D3D; 
+            border-radius: 8px; 
+            color: #E0E6F1; 
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field::placeholder {
+            color: #8892B0; 
+        }
+
+        .input-field:focus {
+            border-color: #64FFDA; 
+            background-color: #102A43; 
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.2);
+        }
+        
+        .role-selection {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .role-selection label {
+            color: #A8B2D1;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .role-options {
+            display: flex;
+            gap: 15px;
+        }
+        .role-options div {
+            flex: 1;
+        }
+        .role-options input[type="radio"] {
+            display: none; 
+        }
+        .role-options input[type="radio"] + label {
+            display: block;
+            padding: 12px 15px;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #0A192F;
+            color: #A8B2D1;
+            font-size: 14px;
+            text-align: center;
+        }
+        .role-options input[type="radio"] + label:hover {
+            border-color: #3E4C5B;
+        }
+        .role-options input[type="radio"]:checked + label {
+            background-color: rgba(100, 255, 218, 0.1);
+            border-color: #64FFDA;
+            color: #64FFDA;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700; 
+            cursor: pointer;
+            margin-top: 20px; 
+            margin-bottom: 25px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 15px rgba(100, 255, 218, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn:hover {
+            background-color: #52D3C8; 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(100, 255, 218, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.25);
+        }
+
+        .toggle-link {
+            color: #A8B2D1; 
+            font-size: 14px;
+            margin-bottom: 0; 
+            text-align: center; 
+        }
+
+        .toggle-link a {
+            color: #64FFDA; 
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-link a:hover {
+            color: #E0E6F1; 
+        }
+
+        .footer {
+            color: #8892B0; 
+            font-size: 13px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .submit-btn.loading span { 
+            opacity: 0;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 3px solid rgba(10, 25, 47, 0.3); 
+            border-top-color: #0A192F; 
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .input-field.error {
+            border-color: #ff7575; 
+            background-color: rgba(255, 117, 117, 0.05);
+        }
+
+        .input-field.success { 
+            border-color: #64FFDA; 
+        }
+
+        .error-message {
+            color: #ff9090; 
+            font-size: 12px;
+            text-align: left;
+            margin-top: 6px;
+            min-height: 18px; 
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .success-notification {
+            background-color: #102A43;
+            color: #64FFDA;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #64FFDA;
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.1);
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease, top 0.5s ease;
+            font-size: 15px;
+        }
+        .success-notification.show {
+            opacity: 1;
+            top: 30px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 50px 25px 40px; 
+                margin: 10px;
+            }
+            .auth-container.signup-mode .form-container {
+                 min-height: 510px; 
+            }
+            .back-to-home-link {
+                top: 15px;
+                left: 20px;
+                font-size: 13px;
+            }
+            .back-to-home-link svg {
+                width: 16px;
+                height: 16px;
+            }
+            .logo-text {
+                font-size: 32px;
+                margin-bottom: 25px;
+                margin-top: 20px; 
+            }
+            .form-title {
+                font-size: 22px;
+                margin-bottom: 30px;
+            }
+            .input-field, .submit-btn {
+                padding: 15px;
+                font-size: 14px;
+            }
+            .role-options {
+                flex-direction: column; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="successNotification" class="success-notification">Pesan Sukses!</div>
+
+    <div class="auth-container" id="authContainer">
+        <a href="index.html" class="back-to-home-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+            </svg>
+            Kembali ke Beranda
+        </a>
+
+        <div class="logo-text">DANAIN</div>
+        
+        <h2 class="form-title" id="formTitle">Masuk ke Danain</h2>
+        
+        <div class="form-container">
+            <div class="form-slide" id="loginForm">
+                <form id="loginFormElement" novalidate>
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            class="input-field" 
+                            placeholder="Username atau Email"
+                            required
+                            autocomplete="username"
+                            id="loginUser"
+                        >
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            class="input-field" 
+                            placeholder="Kata Sandi"
+                            required
+                            autocomplete="current-password"
+                            id="loginPassword"
+                        >
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span>MASUK</span>
+                    </button>
+                </form>
+                
+                <div class="toggle-link">
+                    Belum punya akun? <a href="#signup" id="showSignup">Daftar Sekarang</a>
+                </div>
+            </div>
+
+            <div class="form-slide hidden" id="signupForm">
+                <form id="signupFormElement" novalidate>
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            class="input-field" 
+                            placeholder="Nama Lengkap"
+                            required
+                            autocomplete="name"
+                            id="signupName"
+                        >
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            class="input-field" 
+                            placeholder="Username"
+                            required
+                            autocomplete="username"
+                            id="signupUsername"
+                        >
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <input 
+                            type="email"
+                            class="input-field" 
+                            placeholder="Email"
+                            required
+                            autocomplete="email"
+                            id="signupEmail"
+                        >
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            class="input-field" 
+                            placeholder="Kata Sandi (min. 6 karakter)"
+                            required
+                            autocomplete="new-password"
+                            id="signupPassword"
+                        >
+                        <div class="error-message"></div>
+                    </div>
+
+                    <div class="form-group role-selection">
+                        <label>Saya mendaftar sebagai:</label>
+                        <div class="role-options">
+                            <div>
+                                <input type="radio" id="roleStartup" name="userRole" value="startup" checked>
+                                <label for="roleStartup">Pengelola Proyek</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="roleInvestor" name="userRole" value="investor">
+                                <label for="roleInvestor">Investor</label>
+                            </div>
+                        </div>
+                        <div class="error-message" id="roleError"></div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <span>DAFTAR</span>
+                    </button>
+                </form>
+                
+                <div class="toggle-link">
+                    Sudah punya akun? <a href="#login" id="showLogin">Masuk di sini</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            &copy; <span id="currentYear"></span> Danain. Semua Hak Cipta Dilindungi.
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const authContainer = document.getElementById('authContainer');
+            const formTitle = document.getElementById('formTitle');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const showSignupBtn = document.getElementById('showSignup');
+            const showLoginBtn = document.getElementById('showLogin');
+            
+            const loginFormElement = document.getElementById('loginFormElement');
+            const signupFormElement = document.getElementById('signupFormElement');
+
+            const loginUserInput = document.getElementById('loginUser');
+            const loginPasswordInput = document.getElementById('loginPassword');
+            const signupNameInput = document.getElementById('signupName');
+            const signupUsernameInput = document.getElementById('signupUsername');
+            const signupEmailInput = document.getElementById('signupEmail');
+            const signupPasswordInput = document.getElementById('signupPassword');
+
+            const successNotification = document.getElementById('successNotification');
+
+            let isSignupMode = false;
+
+            function showSuccessNotification(message) {
+                successNotification.textContent = message;
+                successNotification.classList.add('show');
+                setTimeout(() => {
+                    successNotification.classList.remove('show');
+                }, 3000);
+            }
+
+            function displayForm(showSignup) {
+                isSignupMode = showSignup;
+                if (showSignup) {
+                    authContainer.classList.add('signup-mode');
+                    formTitle.textContent = 'Buat Akun Danain';
+                    loginForm.classList.add('hidden-left');
+                    signupForm.classList.remove('hidden', 'hidden-left');
+                    loginFormElement.reset();
+                    clearAllErrors(loginFormElement);
+                } else {
+                    authContainer.classList.remove('signup-mode');
+                    formTitle.textContent = 'Masuk ke Danain';
+                    signupForm.classList.add('hidden');
+                    loginForm.classList.remove('hidden', 'hidden-left');
+                    signupFormElement.reset();
+                    clearAllErrors(signupFormElement);
+                }
+            }
+
+            const currentHash = window.location.hash;
+            if (currentHash === '#signup') {
+                displayForm(true);
+            } else { 
+                displayForm(false);
+            }
+
+            window.addEventListener('hashchange', function() {
+                const newHash = window.location.hash;
+                if (newHash === '#signup') {
+                    displayForm(true);
+                } else {
+                    displayForm(false);
+                }
+            });
+
+            showSignupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = 'signup'; 
+            });
+
+            showLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = 'login'; 
+            });
+            
+            function setErrorMessage(field, message, isRoleError = false) {
+                const errorElement = isRoleError ? document.getElementById('roleError') : field.parentElement.querySelector('.error-message');
+                if (!isRoleError) {
+                    field.classList.add('error');
+                    field.classList.remove('success');
+                }
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+
+            function clearError(field, isRoleError = false) {
+                const errorElement = isRoleError ? document.getElementById('roleError') : field.parentElement.querySelector('.error-message');
+                 if (!isRoleError && field) { 
+                    field.classList.remove('error');
+                }
+                if(errorElement) { 
+                    errorElement.textContent = '';
+                    errorElement.classList.remove('show');
+                }
+            }
+            
+            function clearAllErrors(form) {
+                form.querySelectorAll('.input-field').forEach(input => clearError(input));
+                clearError(null, true); 
+            }
+
+            function validateRequired(field, message = "Kolom ini wajib diisi.") {
+                if (!field || field.value.trim() === '') { 
+                    if(field) setErrorMessage(field, message);
+                    return false;
+                }
+                clearError(field);
+                if(field) field.classList.add('success');
+                return true;
+            }
+
+            function validateEmailFormat(field, message = "Format email tidak valid.") {
+                if (!validateRequired(field)) return false;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(field.value)) {
+                    setErrorMessage(field, message);
+                    return false;
+                }
+                clearError(field);
+                field.classList.add('success');
+                return true;
+            }
+            
+            function validateLoginUser(field, message = "Masukkan username atau email yang valid."){
+                if (!validateRequired(field)) return false;
+                clearError(field);
+                field.classList.add('success');
+                return true;
+            }
+
+            function validatePasswordLength(field, minLength = 6, message = `Kata sandi minimal ${minLength} karakter.`) {
+                if (!validateRequired(field)) return false;
+                if (field.value.length < minLength) {
+                    setErrorMessage(field, message);
+                    return false;
+                }
+                clearError(field);
+                field.classList.add('success');
+                return true;
+            }
+
+            function validateUsernameFormat(field, message = "Username minimal 3 karakter, hanya huruf, angka, dan underscore.") {
+                 if (!validateRequired(field)) return false;
+                const usernameRegex = /^[a-zA-Z0-9_]{3,}$/;
+                if (!usernameRegex.test(field.value)) {
+                    setErrorMessage(field, message);
+                    return false;
+                }
+                clearError(field);
+                field.classList.add('success');
+                return true;
+            }
+            
+            function validateRoleSelection() {
+                const selectedRole = document.querySelector('input[name="userRole"]:checked');
+                if (!selectedRole) {
+                    setErrorMessage(null, "Silakan pilih peran Anda.", true);
+                    return false;
+                }
+                clearError(null, true);
+                return true;
+            }
+
+            loginUserInput.addEventListener('blur', () => validateLoginUser(loginUserInput));
+            loginPasswordInput.addEventListener('blur', () => validatePasswordLength(loginPasswordInput));
+            signupNameInput.addEventListener('blur', () => validateRequired(signupNameInput, "Nama lengkap wajib diisi."));
+            signupUsernameInput.addEventListener('blur', () => validateUsernameFormat(signupUsernameInput));
+            signupEmailInput.addEventListener('blur', () => validateEmailFormat(signupEmailInput));
+            signupPasswordInput.addEventListener('blur', () => validatePasswordLength(signupPasswordInput));
+            
+            const roleInputs = document.querySelectorAll('input[name="userRole"]');
+            roleInputs.forEach(input => input.addEventListener('change', () => clearError(null, true)));
+
+            [loginUserInput, loginPasswordInput, signupNameInput, signupUsernameInput, signupEmailInput, signupPasswordInput].forEach(input => {
+                input.addEventListener('focus', () => clearError(input));
+            });
+
+            function handleFormSubmit(formElement, isRegistration) {
+                formElement.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    let isValid = true;
+                    let userNameForStorage = "Pengguna Demo";
+                    let userRoleForStorage = "startup"; 
+                    let userPasswordForDemo = ""; 
+
+                    if (!isRegistration) { // Login
+                        isValid &= validateLoginUser(loginUserInput);
+                        isValid &= validatePasswordLength(loginPasswordInput);
+                        if(isValid) {
+                            userNameForStorage = loginUserInput.value.includes('@') ? loginUserInput.value.split('@')[0] : loginUserInput.value;
+
+                        }
+                        userRoleForStorage = localStorage.getItem('userRole') || 'startup';
+                    } else { 
+                        isValid &= validateRequired(signupNameInput, "Nama lengkap wajib diisi.");
+                        isValid &= validateUsernameFormat(signupUsernameInput);
+                        isValid &= validateEmailFormat(signupEmailInput);
+                        isValid &= validatePasswordLength(signupPasswordInput);
+                        isValid &= validateRoleSelection(); 
+                        if(isValid) {
+                            userNameForStorage = signupNameInput.value;
+                            userRoleForStorage = document.querySelector('input[name="userRole"]:checked').value;
+                            userPasswordForDemo = signupPasswordInput.value; 
+                        }
+                    }
+
+                    if (isValid) {
+                        const btn = this.querySelector('.submit-btn');
+                        const btnText = btn.querySelector('span');
+                        if(btnText) btnText.style.opacity = '0';
+                        btn.classList.add('loading');
+                        
+                        setTimeout(() => {
+                            btn.classList.remove('loading');
+                            if(btnText) btnText.style.opacity = '1';
+                            
+                            localStorage.setItem('isUserLoggedIn', 'true');
+                            localStorage.setItem('loggedInUserName', userNameForStorage);
+                            localStorage.setItem('userRole', userRoleForStorage);
+
+                            if (isRegistration) {
+                                localStorage.setItem('demoUserPassword', userPasswordForDemo);
+                            }
+
+
+                            const successMessage = isRegistration ? 'Pendaftaran berhasil!' : 'Login berhasil!';
+                            showSuccessNotification(successMessage);
+                            
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const redirectUrl = urlParams.get('redirect');
+
+                            setTimeout(() => {
+                                if (redirectUrl) {
+                                    window.location.href = decodeURIComponent(redirectUrl);
+                                } else {
+                                    if (userRoleForStorage === 'startup') {
+                                        window.location.href = 'dashboard-startup.html';
+                                    } else if (userRoleForStorage === 'investor') {
+                                        window.location.href = 'dashboard-investor.html'; 
+                                    } else {
+                                        window.location.href = 'index.html'; 
+                                    }
+                                }
+                            }, 1500); 
+                            
+                        }, 1500);
+                    }
+                });
+            }
+
+            handleFormSubmit(loginFormElement, false); 
+            handleFormSubmit(signupFormElement, true);  
+            
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>

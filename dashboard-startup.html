@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pengelola - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0F2138; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #1E2D3D; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4C5B; }
+
+        .sidebar {
+            background-color: #0F2138;
+            border-right: 1px solid #1E2D3D;
+        }
+        .sidebar-link {
+            color: #A8B2D1;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #1E2D3D;
+            color: #64FFDA;
+            border-left: 3px solid #64FFDA;
+            padding-left: calc(1.5rem - 3px);
+        }
+        .sidebar-link.active i { color: #64FFDA; }
+        .sidebar-link i { color: #A8B2D1; transition: color 0.2s ease; }
+        .sidebar-link:hover i { color: #64FFDA; }
+        
+        .btn-new-project {
+            background-color: #64FFDA;
+            color: #0A192F;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-new-project:hover {
+            background-color: #52D3C8;
+            transform: translateY(-1px);
+        }
+        .stat-card {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .table-header {
+            background-color: #102A43;
+            color: #A8B2D1;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .table-row { border-bottom: 1px solid #1E2D3D; }
+        .table-row:last-child { border-bottom: none; }
+        .table-cell {
+            color: #E0E6F1;
+            padding: 12px 16px;
+            font-size: 0.875rem;
+        }
+        .progress-bar-container-table {
+            background-color: #1E2D3D;
+            border-radius: 9999px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .progress-bar-fill-table {
+            background-color: #64FFDA;
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.5s ease-in-out;
+        }
+        .reminder-card {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 200px; 
+        }
+        .main-content-area {
+            height: 100vh; 
+            overflow-y: auto; 
+        }
+         .status-badge {
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        .status-aktif { background-color: rgba(74, 222, 128, 0.2); color: #4ADE80; }
+        .status-draf { background-color: rgba(148, 163, 184, 0.2); color: #94A3B8; }
+        .status-review { background-color: rgba(251, 191, 36, 0.2); color: #FBBF24; }
+        .status-terdanai { background-color: rgba(96, 165, 250, 0.2); color: #60A5FA; }
+        .status-selesai { background-color: rgba(56, 189, 248, 0.2); color: #38BDF8; }
+        .status-ditolak { background-color: rgba(248, 113, 113, 0.2); color: #F87171; }
+
+        .progress-bar-bg-sm { background-color: #1E2D3D; height: 6px; }
+        .progress-bar-fill-sm { background-color: #64FFDA; height: 6px; }
+         .btn-outline-white {
+            background-color: transparent;
+            color: #E0E6F1;
+            border: 1px solid #3E4C5B; 
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-outline-white:hover {
+            background-color: #102A43;
+            border-color: #64FFDA;
+            color: #64FFDA;
+        }
+        .notification-badge {
+            background-color: #EF4444;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 1px 5px;
+            border-radius: 9999px;
+            position: relative;
+            top: -2px;
+        }
+    </style>
+</head>
+<body class="flex antialiased">
+
+    <aside class="sidebar w-64 min-h-screen flex-shrink-0 flex flex-col fixed top-0 left-0 z-40 lg:relative lg:translate-x-0 transform -translate-x-full lg:transition-none transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="h-20 flex items-center justify-center px-6 border-b border-gray-700">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+        </div>
+
+        <nav class="flex-grow pt-6">
+            <a href="dashboard-startup.html" class="sidebar-link active flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-tachometer-alt w-5 h-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#my-projects-section" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-project-diagram w-5 h-5"></i>
+                <span>Proyek Saya</span>
+            </a>
+            <a href="contact-investor-placeholder.html" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-comments-dollar w-5 h-5"></i>
+                <span>Kontak Investor</span>
+            </a>
+            <a href="pengaturan-akun.html" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-cog w-5 h-5"></i>
+                <span>Pengaturan</span>
+            </a>
+            <a href="notifikasi.html" id="sidebarNotifLink" class="sidebar-link flex items-center justify-between px-6 py-3">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-bell w-5 h-5"></i>
+                    <span>Notifikasi</span>
+                </div>
+                <span id="sidebarNotificationBadge" class="notification-badge hidden">0</span>
+            </a>
+        </nav>
+
+        <div class="px-6 py-4 border-t border-gray-700 space-y-4 mt-auto">
+            <a href="buat-proyek.html" class="btn-new-project w-full flex items-center justify-center py-2.5 rounded-lg font-semibold text-sm">
+                <i class="fas fa-plus mr-2"></i>Proyek Baru
+            </a>
+            <div class="flex items-center space-x-3 pt-2">
+                <img id="userAvatarSidebar" src="https://placehold.co/40x40/0A192F/64FFDA?text=U" alt="Avatar Pengguna" class="w-10 h-10 rounded-full border-2 border-gray-600">
+                <div>
+                    <p id="userNameSidebar" class="text-sm font-semibold text-gray-200">Nama Pengguna</p>
+                    <a href="#" id="logoutButtonSidebar" class="text-xs text-gray-500 hover:text-red-400 transition-colors">Logout</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+    
+    <button id="sidebarToggle" class="lg:hidden fixed top-5 left-5 z-50 p-2 rounded-md bg-gray-800 text-white">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="flex-1 flex flex-col main-content-area">
+        <main class="flex-grow p-6 md:p-8 lg:p-10">
+            <div id="dashboardContent" class="opacity-0 transition-opacity duration-500 ease-in-out">
+                <h1 id="welcomeMessage" class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">Welcome Back, Name!</h1>
+                <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase tracking-wider">Total Proyek Anda</p>
+                                <p id="totalProjectsStat" class="text-4xl font-bold text-gray-100 mt-1">0</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-gray-700">
+                                <i class="fas fa-user-circle text-2xl text-blue-400"></i>
+                            </div>
+                        </div>
+                        <p id="totalProjectsChange" class="text-xs text-gray-500 mt-3"><i class="fas fa-sync-alt text-blue-500 mr-1"></i>Data dari proyek Anda</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase tracking-wider">Rata-Rata Progres Dana</p>
+                                <p id="avgFundProgressStat" class="text-4xl font-bold text-gray-100 mt-1">0%</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-gray-700">
+                                <i class="fas fa-chart-bar text-2xl text-green-400"></i>
+                            </div>
+                        </div>
+                        <p id="avgFundProgressChange" class="text-xs text-gray-500 mt-3"><i class="fas fa-chart-pie text-green-500 mr-1"></i>Dari proyek aktif/terdanai</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-400 uppercase tracking-wider">Investor Terlibat (Estimasi)</p>
+                                <p id="investorEngagedStat" class="text-4xl font-bold text-gray-100 mt-1">0</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-gray-700">
+                                <i class="fas fa-users text-2xl text-purple-400"></i>
+                            </div>
+                        </div>
+                        <p id="investorEngagedChange" class="text-xs text-gray-500 mt-3"><i class="fas fa-users text-purple-500 mr-1"></i>Estimasi platform</p>
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 section-card p-0 overflow-x-auto" id="my-projects-section">
+                        <h2 class="text-xl font-semibold text-gray-100 px-5 pt-5 pb-3">Status Proyek</h2>
+                        <table class="min-w-full"><thead class="table-header"><tr><th class="table-cell text-left">Nama Proyek</th><th class="table-cell text-right">Target Dana</th><th class="table-cell text-right">Progres (%)</th><th class="table-cell text-left">Progres Pendanaan</th><th class="table-cell text-left">Status</th><th class="table-cell text-left">Aksi</th></tr></thead><tbody id="myProjectsTableBody"><tr><td colspan="6" id="loadingMyProjects" class="table-cell text-center text-gray-400 py-8">Memuat proyek Anda...</td></tr></tbody></table>
+                        <div id="noMyProjects" class="hidden text-center text-gray-400 py-8 px-5"><i class="fas fa-folder-open text-3xl mb-3"></i><p>Anda belum memiliki proyek. <a href="buat-proyek.html" class="text-blue-400 hover:underline">Buat proyek pertama Anda!</a></p></div>
+                    </div>
+                
+                    <div class="lg:col-span-1"> {/* Reminder Card di kolom terpisah */}
+                         <div class="reminder-card">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Pengingat</h2>
+                            <div id="remindersList" class="space-y-3">
+                                <p class="text-sm text-gray-400">Tidak ada pengingat penting saat ini.</p>
+                                </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function formatRupiah(angka) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka); }
+        function getStatusBadgeClass(status) {
+            if (!status) return 'status-draf';
+            switch (status.toLowerCase()) {
+                case 'pendanaan aktif': return 'status-aktif';
+                case 'draf': return 'status-draf';
+                case 'menunggu persetujuan': return 'status-review';
+                case 'terdanai': return 'status-terdanai';
+                case 'selesai': return 'status-selesai';
+                case 'ditolak': return 'status-ditolak';
+                default: return 'status-draf';
+            }
+        }
+        function renderMyProjectTableRow(proyek) {
+            const targetDana = parseFloat(proyek.fundingTarget) || parseFloat(proyek.targetDana) || 0;
+            const danaTerkumpul = parseFloat(proyek.danaTerkumpul) || 0;
+            const persentaseTerkumpul = targetDana > 0 ? (danaTerkumpul / targetDana) * 100 : 0;
+            const statusBadgeClass = getStatusBadgeClass(proyek.status);
+            const namaProyek = proyek.projectName || proyek.namaProyek || 'Nama Proyek Tidak Ada';
+            const kelolaProyekLink = `kelola-proyek.html?id=${proyek.id}`;
+            const editProyekLink = `edit-proyek.html?id=${proyek.id}`;
+            return `
+                <tr class="table-row hover:bg-gray-800 transition-colors">
+                    <td class="table-cell"><a href="detail-proyek.html?id=${proyek.id}" class="hover:text-gray-300 font-medium">${namaProyek}</a></td>
+                    <td class="table-cell text-right">${formatRupiah(targetDana)}</td>
+                    <td class="table-cell text-right">${persentaseTerkumpul.toFixed(0)}%</td>
+                    <td class="table-cell"><div class="progress-bar-container-table w-full"><div class="progress-bar-fill-table" style="width: ${persentaseTerkumpul.toFixed(0)}%;"></div></div></td>
+                    <td class="table-cell"><span class="status-badge ${statusBadgeClass}">${proyek.status || 'Draf'}</span></td>
+                    <td class="table-cell">
+                        <a href="detail-proyek.html?id=${proyek.id}" title="Lihat Detail" class="text-blue-400 hover:text-blue-300 mr-3"><i class="fas fa-eye"></i></a>
+                        ${(proyek.status && (proyek.status.toLowerCase() === 'draf' || proyek.status.toLowerCase() === 'menunggu persetujuan')) ? `
+                        <a href="${editProyekLink}" title="Edit Proyek" class="text-yellow-400 hover:text-yellow-300 mr-3"><i class="fas fa-edit"></i></a>
+                        ` : `
+                        <a href="${kelolaProyekLink}" title="Kelola Proyek" class="text-green-400 hover:text-green-300"><i class="fas fa-tasks"></i></a>
+                        `}
+                    </td>
+                </tr>
+            `;
+        }
+
+        function updateNotificationBadgeInSidebar() {
+            const sidebarNotificationBadge = document.getElementById('sidebarNotificationBadge');
+            if (!sidebarNotificationBadge) return;
+            const notifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
+            const unreadCount = notifications.filter(n => !n.isRead).length;
+            if (unreadCount > 0) {
+                sidebarNotificationBadge.textContent = unreadCount;
+                sidebarNotificationBadge.classList.remove('hidden');
+            } else {
+                sidebarNotificationBadge.classList.add('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dashboardContent = document.getElementById('dashboardContent');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna Startup"; 
+            const userRole = localStorage.getItem('userRole');
+
+            if (isUserLoggedIn !== 'true' || userRole !== 'startup') {
+                const redirectParam = userRole !== 'startup' && isUserLoggedIn === 'true' 
+                                    ? (userRole === 'investor' ? 'dashboard-investor.html' : 'index.html') 
+                                    : `auth.html#login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+                if (userRole !== 'startup' && isUserLoggedIn === 'true') {
+                    alert("Hanya pengelola proyek yang dapat mengakses dashboard ini. Anda akan diarahkan.");
+                }
+                window.location.href = redirectParam;
+                return;
+            }
+            
+            dashboardContent.classList.remove('opacity-0');
+            dashboardContent.style.opacity = '1';
+            if(welcomeMessage) welcomeMessage.textContent = `Welcome Back, ${loggedInUserName}!`;
+
+            const userNameSidebar = document.getElementById('userNameSidebar');
+            if(userNameSidebar) userNameSidebar.textContent = loggedInUserName;
+            const logoutButtonSidebar = document.getElementById('logoutButtonSidebar');
+            if(logoutButtonSidebar) {
+                 logoutButtonSidebar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                     ['isUserLoggedIn', 'loggedInUserName', 'userRole', 'demoUserEmail', 
+                         'demoUserPassword', 'demoUserUsername', 'notificationPreferences', 
+                         'myProjects', 'myInvestments', 'wishlistedProjects', 'userNotifications'].forEach(item => localStorage.removeItem(item));
+                    window.location.href = 'index.html';
+                });
+            }
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() { sidebar.classList.toggle('-translate-x-full'); });
+                document.addEventListener('click', function(event) {
+                    if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                });
+            }
+            
+            document.querySelectorAll('aside a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (window.innerWidth < 1024 && sidebar) { sidebar.classList.add('-translate-x-full'); }
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        document.querySelector('.main-content-area').scrollTo({ top: targetElement.offsetTop - 20, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            const totalProjectsStat = document.getElementById('totalProjectsStat');
+            const avgFundProgressStat = document.getElementById('avgFundProgressStat');
+            const investorEngagedStat = document.getElementById('investorEngagedStat');
+            const totalProjectsChange = document.getElementById('totalProjectsChange');
+            const avgFundProgressChange = document.getElementById('avgFundProgressChange');
+            const investorEngagedChange = document.getElementById('investorEngagedChange');
+
+            const myStoredProjects = JSON.parse(localStorage.getItem('myProjects')) || [];
+            const projectsToDisplay = myStoredProjects;
+
+            if(totalProjectsStat) totalProjectsStat.textContent = projectsToDisplay.length;
+            if(totalProjectsChange) totalProjectsChange.innerHTML = `<i class="fas fa-sync-alt text-blue-500 mr-1"></i>${projectsToDisplay.length} proyek Anda`;
+            
+            let totalPercentage = 0;
+            const activeOrFundedProjects = projectsToDisplay.filter(p => {
+                const status = (p.status || '').toLowerCase();
+                return (status === 'pendanaan aktif' || status === 'terdanai') && (parseFloat(p.fundingTarget) || parseFloat(p.targetDana) || 0) > 0;
+            });
+
+            if (activeOrFundedProjects.length > 0) {
+                activeOrFundedProjects.forEach(p => {
+                    const target = parseFloat(p.fundingTarget) || parseFloat(p.targetDana) || 1;
+                    const terkumpul = parseFloat(p.danaTerkumpul) || 0;
+                    totalPercentage += (terkumpul / target) * 100;
+                });
+                const avgProgress = totalPercentage / activeOrFundedProjects.length;
+                if(avgFundProgressStat) avgFundProgressStat.textContent = `${avgProgress.toFixed(0)}%`;
+                if(avgFundProgressChange) avgFundProgressChange.innerHTML = `<i class="fas fa-chart-pie text-green-500 mr-1"></i>Dari ${activeOrFundedProjects.length} proyek aktif/terdanai`;
+            } else {
+                if(avgFundProgressStat) avgFundProgressStat.textContent = `0%`;
+                if(avgFundProgressChange) avgFundProgressChange.innerHTML = `<i class="fas fa-info-circle text-gray-500 mr-1"></i>Belum ada proyek aktif/terdanai`;
+            }
+
+            if(investorEngagedStat) investorEngagedStat.textContent = Math.floor(Math.random() * 20) + 5; 
+            if(investorEngagedChange) investorEngagedChange.innerHTML = `<i class="fas fa-users text-purple-500 mr-1"></i>Estimasi platform`;
+
+            const myProjectsTableBody = document.getElementById('myProjectsTableBody');
+            const loadingMyProjects = document.getElementById('loadingMyProjects');
+            const noMyProjects = document.getElementById('noMyProjects');
+
+            if (myProjectsTableBody && loadingMyProjects && noMyProjects) {
+                myProjectsTableBody.innerHTML = '';
+                if (projectsToDisplay.length > 0) {
+                    projectsToDisplay.sort((a,b) => (b.id || 0) - (a.id || 0)); 
+                    projectsToDisplay.forEach(proyek => {
+                        myProjectsTableBody.innerHTML += renderMyProjectTableRow(proyek);
+                    });
+                    if(loadingMyProjects.parentElement) loadingMyProjects.parentElement.removeChild(loadingMyProjects);
+                    noMyProjects.classList.add('hidden');
+                } else {
+                     if(loadingMyProjects.parentElement) loadingMyProjects.parentElement.removeChild(loadingMyProjects);
+                    noMyProjects.classList.remove('hidden');
+                }
+            }
+            updateNotificationBadgeInSidebar();
+        });
+    </script>
+</body>
+</html>

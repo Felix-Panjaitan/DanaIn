@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Proyek - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        .top-navbar {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+            height: 4.5rem; 
+        }
+        .top-navbar-link { color: #A8B2D1; transition: color 0.2s ease; }
+        .top-navbar-link:hover, .top-navbar-link.active { color: #64FFDA; }
+        .top-navbar-link.active { font-weight: 600; }
+
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary { 
+            background-color: #1E2D3D;
+            color: #A8B2D1;
+            border: 1px solid #3E4C5B;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #3E4C5B;
+            border-color: #64FFDA;
+            color: #64FFDA;
+        }
+        .btn-danger {
+            background-color: #EF4444; 
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #DC2626;
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .form-section {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .form-label {
+            display: block;
+            color: #A8B2D1;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #0A192F; 
+            border: 1px solid #3E4C5B; 
+            border-radius: 6px; 
+            color: #E0E6F1; 
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #64FFDA; 
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+        }
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .error-message {
+            color: #ff9090; 
+            font-size: 0.75rem;
+            margin-top: 4px;
+            display: none;
+        }
+        .form-input.error, .form-textarea.error, .form-select.error {
+            border-color: #ff7575;
+        }
+        .form-input.success, .form-textarea.success, .form-select.success {
+            border-color: #64FFDA;
+        }
+        .success-popup {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #102A43;
+            color: #64FFDA;
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid #64FFDA;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .success-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .delete-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .delete-confirmation-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #102A43;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #1E2D3D;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="successPopup" class="success-popup">Perubahan berhasil disimpan!</div>
+    <div id="deleteConfirmationModal" class="delete-confirmation-modal">
+        <div class="modal-content">
+            <h3 class="text-xl font-semibold text-gray-100 mb-4">Konfirmasi Hapus Proyek</h3>
+            <p class="text-gray-300 mb-6">Apakah Anda yakin ingin menghapus proyek "<span id="deleteProjectName"></span>"? Tindakan ini tidak dapat diurungkan.</p>
+            <div class="flex justify-center gap-4">
+                <button id="cancelDeleteButton" class="btn-secondary px-6 py-2 rounded-md">Batal</button>
+                <button id="confirmDeleteButton" class="btn-danger px-6 py-2 rounded-md">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+
+    <header class="top-navbar sticky top-0 z-50">
+        <nav class="container mx-auto px-6 h-full flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="daftar-proyek.html" class="top-navbar-link">Telusuri Proyek</a>
+                <a href="dashboard-startup.html" id="dashboardLink" class="top-navbar-link">Dashboard Saya</a>
+                <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+                <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="topMobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="topMobileMenu" class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg">
+            <a href="daftar-proyek.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Telusuri Proyek</a>
+            <a href="dashboard-startup.html" id="mobileDashboardLink" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Dashboard Saya</a>
+            <div id="topNavUserSectionMobile" class="hidden border-t border-gray-700 mt-2 pt-2"></div>
+            <div id="topNavAuthLinksMobile" class="border-t border-gray-700 mt-2 pt-2">
+                <a href="auth.html#login" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Masuk</a>
+                <a href="auth.html#signup" class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="editProjectContent" class="opacity-0 transition-opacity duration-500 ease-in-out">
+            <div class="mb-8 md:mb-12">
+                 <a href="dashboard-startup.html" class="inline-flex items-center text-sm text-blue-400 hover:text-blue-300 mb-4">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+                </a>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-100">Edit Proyek Anda</h1>
+                <p class="text-lg text-gray-400 mt-2 max-w-2xl">Perbarui detail proyek Anda di bawah ini.</p>
+            </div>
+
+            <div id="projectNotFoundMessage" class="hidden form-section text-center">
+                <i class="fas fa-exclamation-triangle text-4xl text-yellow-400 mb-4"></i>
+                <p class="text-xl text-gray-200">Proyek tidak ditemukan atau Anda tidak memiliki izin untuk mengeditnya.</p>
+            </div>
+
+            <form id="editProjectForm" class="max-w-3xl mx-auto hidden" novalidate>
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Informasi Dasar Proyek</h2>
+                    <input type="hidden" id="projectId" name="projectId">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="projectName" class="form-label">Nama Proyek <span class="text-red-500">*</span></label>
+                            <input type="text" id="projectName" name="projectName" class="form-input" required>
+                            <p class="error-message"></p>
+                        </div>
+                        <div>
+                            <label for="projectTagline" class="form-label">Tagline Proyek</label>
+                            <input type="text" id="projectTagline" name="projectTagline" class="form-input">
+                            <p class="error-message"></p>
+                        </div>
+                        <div>
+                            <label for="projectCategory" class="form-label">Kategori Proyek <span class="text-red-500">*</span></label>
+                            <select id="projectCategory" name="projectCategory" class="form-select" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Teknologi">Teknologi</option>
+                                <option value="Pendidikan">Pendidikan</option>
+                                <option value="Kesehatan">Kesehatan</option>
+                                <option value="Pertanian">Pertanian</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Sosial">Sosial</option>
+                                <option value="Properti">Properti</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <p class="error-message"></p>
+                        </div>
+                        <div>
+                            <label for="projectLocation" class="form-label">Lokasi Proyek <span class="text-red-500">*</span></label>
+                            <input type="text" id="projectLocation" name="projectLocation" class="form-input" required>
+                            <p class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <label for="projectImageURL" class="form-label">URL Gambar Utama Proyek <span class="text-red-500">*</span></label>
+                        <input type="url" id="projectImageURL" name="projectImageURL" class="form-input" required>
+                        <p class="error-message"></p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="projectVideoURL" class="form-label">URL Video Pitch (YouTube - Opsional)</label>
+                        <input type="url" id="projectVideoURL" name="projectVideoURL" class="form-input">
+                        <p class="error-message"></p>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Deskripsi Proyek</h2>
+                    <div>
+                        <label for="projectDescription" class="form-label">Deskripsi Lengkap Proyek <span class="text-red-500">*</span></label>
+                        <textarea id="projectDescription" name="projectDescription" class="form-textarea" required></textarea>
+                        <p class="error-message"></p>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Detail Pendanaan</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="fundingTarget" class="form-label">Target Dana (IDR) <span class="text-red-500">*</span></label>
+                            <input type="number" id="fundingTarget" name="fundingTarget" class="form-input" required min="1000000">
+                            <p class="error-message"></p>
+                        </div>
+                        <div>
+                            <label for="campaignDuration" class="form-label">Durasi Kampanye (Hari) <span class="text-red-500">*</span></label>
+                            <input type="number" id="campaignDuration" name="campaignDuration" class="form-input" required min="7" max="120">
+                            <p class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <label for="investmentScheme" class="form-label">Skema Investasi untuk Investor <span class="text-red-500">*</span></label>
+                        <textarea id="investmentScheme" name="investmentScheme" class="form-textarea" required></textarea>
+                        <p class="error-message"></p>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Informasi Tambahan</h2>
+                    <div>
+                        <label for="projectRisks" class="form-label">Risiko & Tantangan Proyek</label>
+                        <textarea id="projectRisks" name="projectRisks" class="form-textarea"></textarea>
+                        <p class="error-message"></p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="teamInfo" class="form-label">Tentang Tim/Pengelola</label>
+                        <textarea id="teamInfo" name="teamInfo" class="form-textarea"></textarea>
+                        <p class="error-message"></p>
+                    </div>
+                     <div class="mt-6">
+                        <label for="proposalLink" class="form-label">Link Proposal/Dokumen Pendukung 1 (URL)</label>
+                        <input type="url" id="proposalLink" name="proposalLink" class="form-input" placeholder="https://example.com/proposal.pdf">
+                        <p class="error-message"></p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="presentationLink" class="form-label">Link Presentasi/Dokumen Pendukung 2 (URL)</label>
+                        <input type="url" id="presentationLink" name="presentationLink" class="form-input" placeholder="https://example.com/presentasi.pptx">
+                        <p class="error-message"></p>
+                    </div>
+                </section>
+
+                <div class="mt-10 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <button type="button" id="deleteProjectButton" class="btn-danger px-6 py-2.5 rounded-md font-semibold text-sm">Hapus Proyek Ini</button>
+                    <div class="flex gap-4">
+                        <a href="dashboard-startup.html" class="btn-secondary px-8 py-3 rounded-md font-semibold">Batal</a>
+                        <button type="submit" class="btn-primary px-8 py-3 rounded-md font-semibold">Simpan Perubahan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>© <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editProjectContent = document.getElementById('editProjectContent');
+            const successPopup = document.getElementById('successPopup');
+            const form = document.getElementById('editProjectForm');
+            const projectNotFoundMessage = document.getElementById('projectNotFoundMessage');
+            const deleteProjectButton = document.getElementById('deleteProjectButton');
+            const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
+            const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+            const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+            const deleteProjectNameSpan = document.getElementById('deleteProjectName');
+            let currentEditingProjectId = null;
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna"; 
+            const userRole = localStorage.getItem('userRole');
+            const topNavAuthLinksDesktop = document.getElementById('topNavAuthLinksDesktop');
+            const topNavUserSectionDesktop = document.getElementById('topNavUserSectionDesktop');
+            const topNavAuthLinksMobile = document.getElementById('topNavAuthLinksMobile');
+            const topNavUserSectionMobile = document.getElementById('topNavUserSectionMobile');
+            const dashboardLink = document.getElementById('dashboardLink');
+            const mobileDashboardLink = document.getElementById('mobileDashboardLink');
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor-placeholder.html' : 'dashboard-startup.html';
+            if(dashboardLink) dashboardLink.href = dashboardUrl;
+            if(mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+            if (isUserLoggedIn !== 'true') {
+                window.location.href = `auth.html#login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+                return; 
+            }
+            if (userRole !== 'startup') {
+                 alert("Hanya pengelola proyek yang dapat mengedit proyek. Anda akan diarahkan ke dashboard Anda.");
+                 window.location.href = dashboardUrl;
+                 return;
+            }
+
+            editProjectContent.classList.remove('opacity-0');
+            editProjectContent.style.opacity = '1';
+
+            if (isUserLoggedIn === 'true') {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'none';
+                if(topNavUserSectionDesktop) {
+                    topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+                    topNavUserSectionDesktop.classList.remove('hidden');
+                    topNavUserSectionDesktop.classList.add('flex', 'items-center');
+                    setupLogoutButton('logoutButtonTopDesktop');
+                }
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'none';
+                if(topNavUserSectionMobile) {
+                    topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+                    topNavUserSectionMobile.classList.remove('hidden');
+                     setupLogoutButton('logoutButtonTopMobile');
+                }
+            }
+            
+            function setupLogoutButton(buttonId) {
+                const logoutButton = document.getElementById(buttonId);
+                if (logoutButton) {
+                    logoutButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isUserLoggedIn');
+                        localStorage.removeItem('loggedInUserName');
+                        localStorage.removeItem('userRole');
+                        window.location.href = 'index.html';
+                    });
+                }
+            }
+
+            const topMobileMenuButton = document.getElementById('topMobileMenuButton');
+            const topMobileMenu = document.getElementById('topMobileMenu');
+            if(topMobileMenuButton && topMobileMenu) {
+                topMobileMenuButton.addEventListener('click', function() { topMobileMenu.classList.toggle('hidden'); });
+                 document.addEventListener('click', function(event) {
+                    if (!topMobileMenuButton.contains(event.target) && !topMobileMenu.contains(event.target)) {
+                        topMobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            const currentYearFooter = document.getElementById('currentYearFooter');
+            if(currentYearFooter) currentYearFooter.textContent = new Date().getFullYear();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectIdToEdit = parseInt(urlParams.get('id'));
+            currentEditingProjectId = projectIdToEdit; 
+            let myProjects = JSON.parse(localStorage.getItem('myProjects')) || [];
+            const projectToEdit = myProjects.find(p => p.id === projectIdToEdit);
+
+            if (projectToEdit) {
+                form.classList.remove('hidden');
+                projectNotFoundMessage.classList.add('hidden');
+                document.getElementById('projectId').value = projectToEdit.id;
+                document.getElementById('projectName').value = projectToEdit.projectName || '';
+                document.getElementById('projectTagline').value = projectToEdit.projectTagline || '';
+                document.getElementById('projectCategory').value = projectToEdit.projectCategory || '';
+                document.getElementById('projectLocation').value = projectToEdit.projectLocation || '';
+                document.getElementById('projectImageURL').value = projectToEdit.projectImageURL || '';
+                document.getElementById('projectVideoURL').value = projectToEdit.projectVideoURL || '';
+                document.getElementById('projectDescription').value = projectToEdit.projectDescription || '';
+                document.getElementById('fundingTarget').value = projectToEdit.fundingTarget || '';
+                document.getElementById('campaignDuration').value = projectToEdit.campaignDuration || '';
+                document.getElementById('investmentScheme').value = projectToEdit.investmentScheme || '';
+                document.getElementById('projectRisks').value = projectToEdit.projectRisks || '';
+                document.getElementById('teamInfo').value = projectToEdit.teamInfo || '';
+                document.getElementById('proposalLink').value = projectToEdit.proposalLink || '';
+                document.getElementById('presentationLink').value = projectToEdit.presentationLink || '';
+
+                if(deleteProjectNameSpan) deleteProjectNameSpan.textContent = projectToEdit.projectName || 'proyek ini';
+
+            } else {
+                form.classList.add('hidden');
+                projectNotFoundMessage.classList.remove('hidden');
+                if(deleteProjectButton) deleteProjectButton.style.display = 'none';
+            }
+
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            function validateField(field) {
+                let isValid = true;
+                let errorMessage = "";
+                const errorDisplay = field.parentElement.querySelector('.error-message');
+                
+                field.classList.remove('error', 'success');
+                if(errorDisplay) errorDisplay.style.display = 'none';
+
+                if (field.hasAttribute('required') && field.value.trim() === '') {
+                    isValid = false;
+                    errorMessage = "Kolom ini wajib diisi.";
+                } else if (field.type === 'url' && field.value.trim() !== '' && !/^https?:\/\/.+\..+/.test(field.value)) {
+                    isValid = false;
+                    errorMessage = "Format URL tidak valid.";
+                } else if (field.type === 'number') {
+                    const min = parseFloat(field.min);
+                    const max = parseFloat(field.max);
+                    const value = parseFloat(field.value);
+                    if (field.hasAttribute('min') && value < min) {
+                        isValid = false;
+                        errorMessage = `Nilai minimal adalah ${min}.`;
+                    }
+                    if (field.hasAttribute('max') && value > max) {
+                        isValid = false;
+                        errorMessage = `Nilai maksimal adalah ${max}.`;
+                    }
+                } else if (field.id === 'projectCategory' && field.value === '') {
+                     isValid = false;
+                     errorMessage = "Silakan pilih kategori proyek.";
+                }
+
+                if (!isValid) {
+                    field.classList.add('error');
+                    if(errorDisplay) {
+                        errorDisplay.textContent = errorMessage;
+                        errorDisplay.style.display = 'block';
+                    }
+                } else if (field.value.trim() !== '') {
+                    field.classList.add('success');
+                }
+                return isValid;
+            }
+
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', () => {
+                     if(input.classList.contains('error')){
+                        input.classList.remove('error');
+                        const errorDisplay = input.parentElement.querySelector('.error-message');
+                        if(errorDisplay) errorDisplay.style.display = 'none';
+                     }
+                });
+            });
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let isFormValid = true;
+                inputs.forEach(input => {
+                    if (!validateField(input)) {
+                        isFormValid = false;
+                    }
+                });
+
+                if (isFormValid && projectToEdit) {
+                    const formData = new FormData(form);
+                    projectToEdit.projectName = formData.get('projectName');
+                    projectToEdit.projectTagline = formData.get('projectTagline');
+                    projectToEdit.projectCategory = formData.get('projectCategory');
+                    projectToEdit.projectLocation = formData.get('projectLocation');
+                    projectToEdit.projectImageURL = formData.get('projectImageURL');
+                    projectToEdit.projectVideoURL = formData.get('projectVideoURL');
+                    projectToEdit.projectDescription = formData.get('projectDescription');
+                    projectToEdit.fundingTarget = formData.get('fundingTarget');
+                    projectToEdit.campaignDuration = formData.get('campaignDuration');
+                    projectToEdit.investmentScheme = formData.get('investmentScheme');
+                    projectToEdit.projectRisks = formData.get('projectRisks');
+                    projectToEdit.teamInfo = formData.get('teamInfo');
+                    projectToEdit.proposalLink = formData.get('proposalLink');
+                    projectToEdit.presentationLink = formData.get('presentationLink');
+
+                    const projectIndex = myProjects.findIndex(p => p.id === projectIdToEdit);
+                    if (projectIndex > -1) {
+                        myProjects[projectIndex] = projectToEdit;
+                        localStorage.setItem('myProjects', JSON.stringify(myProjects));
+                    }
+                    
+                    console.log('Data Proyek Diperbarui:', projectToEdit);
+                    successPopup.textContent = `Proyek "${projectToEdit.projectName}" berhasil diperbarui!`;
+                    successPopup.classList.add('show');
+
+                    setTimeout(() => {
+                        successPopup.classList.remove('show');
+                        window.location.href = 'dashboard-startup.html'; 
+                    }, 2000);
+
+                } else if (!projectToEdit) {
+                     alert('Gagal menyimpan: Proyek tidak ditemukan.');
+                } else {
+                    alert('Harap perbaiki semua error pada form sebelum menyimpan.');
+                }
+            });
+            if (deleteProjectButton) {
+                deleteProjectButton.addEventListener('click', function() {
+                    if (projectToEdit) {
+                        deleteConfirmationModal.classList.add('show');
+                    } else {
+                        alert('Proyek tidak ditemukan untuk dihapus.');
+                    }
+                });
+            }
+
+            if (cancelDeleteButton) {
+                cancelDeleteButton.addEventListener('click', function() {
+                    deleteConfirmationModal.classList.remove('show');
+                });
+            }
+
+            if (confirmDeleteButton) {
+                confirmDeleteButton.addEventListener('click', function() {
+                    if (currentEditingProjectId !== null) {
+                        myProjects = myProjects.filter(p => p.id !== currentEditingProjectId);
+                        localStorage.setItem('myProjects', JSON.stringify(myProjects));
+                        
+                        deleteConfirmationModal.classList.remove('show');
+                        successPopup.textContent = 'Proyek berhasil dihapus!';
+                        successPopup.classList.add('show');
+                        
+                        setTimeout(() => {
+                            successPopup.classList.remove('show');
+                            window.location.href = 'dashboard-startup.html';
+                        }, 2000);
+                    }
+                });
+            }
+            if(deleteConfirmationModal){
+                deleteConfirmationModal.addEventListener('click', function(event){
+                    if(event.target === deleteConfirmationModal){
+                        deleteConfirmationModal.classList.remove('show');
+                    }
+                });
+            }
+
+
+        });
+    </script>
+</body>
+</html>

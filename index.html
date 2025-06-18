@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANAIN - Platform Pendanaan Inovatif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F; 
+            color: #E0E6F1; 
+        }
+        .navbar-bg {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+        }
+        .hero-section {
+            background-color: #0A192F; 
+        }
+        .achievement-card {
+            background-color: #102A43; 
+            border: 1px solid #1E2D3D;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(10, 161, 222, 0.1);
+        }
+        .how-it-works-card {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            transition: background-color 0.3s ease;
+        }
+        .how-it-works-card:hover {
+            background-color: #173A5E;
+        }
+        .recommendation-card { 
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(10, 161, 222, 0.1);
+        }
+        .faq-item {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px; 
+            margin-bottom: 12px; 
+        }
+        .faq-item summary {
+            padding: 16px;
+            cursor: pointer;
+            outline: none;
+        }
+        .faq-item summary::-webkit-details-marker { 
+            display: none;
+        }
+        .faq-item summary i { 
+            transition: transform 0.3s ease;
+        }
+        .faq-item[open] summary i {
+            transform: rotate(180deg);
+        }
+        .faq-item div { 
+            padding: 0 16px 16px;
+        }
+
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #64FFDA;
+            border: 1px solid #64FFDA;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.1);
+        }
+        .section-title {
+            color: #CCD6F6; 
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .category-tag {
+            background-color: rgba(100, 255, 218, 0.1);
+            color: #64FFDA;
+            font-size: 0.75rem; 
+            padding: 0.25rem 0.75rem; 
+            border-radius: 9999px; 
+        }
+        .animated-title span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+         .nav-link { 
+            color: #A8B2D1; 
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #64FFDA; 
+        }
+        .nav-link.active {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="navbar-bg sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;"> 
+                DANAIN
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="#achievements" class="nav-link">Pencapaian</a>
+                <a href="#how-it-works" class="nav-link">Cara Kerja</a>
+                <a href="daftar-proyek.html" class="nav-link">Telusuri Proyek</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="tentang-kami.html" class="nav-link">Tentang Kami</a>
+                
+                <div id="navUserSectionDesktop" class="hidden items-center space-x-4"></div>
+                <div id="navAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" id="navLoginLinkDesktop" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" id="navRegisterLinkDesktop" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="focus:outline-none">
+                    <i class="fas fa-bars text-2xl" style="color: #64FFDA;"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-opacity-95 backdrop-blur-md" style="background-color: #0c1f3a;">
+            <a href="#achievements" class="block px-6 py-3 nav-link hover:bg-gray-700">Pencapaian</a>
+            <a href="#how-it-works" class="block px-6 py-3 nav-link hover:bg-gray-700">Cara Kerja</a>
+            <a href="daftar-proyek.html" class="block px-6 py-3 nav-link hover:bg-gray-700">Telusuri Proyek</a>
+            <a href="#faq" class="block px-6 py-3 nav-link hover:bg-gray-700">FAQ</a>
+            <a href="tentang-kami.html" class="block px-6 py-3 nav-link hover:bg-gray-700">Tentang Kami</a>
+            
+            <div id="navUserSectionMobile" class="hidden border-t border-gray-700 pt-2"></div>
+            <div id="navAuthLinksMobile" class="border-t border-gray-700 pt-2">
+                <a href="auth.html#login" id="mobileNavLoginLink" class="block px-6 py-3 nav-link hover:bg-gray-700">Masuk</a>
+                <a href="auth.html#signup" id="mobileNavRegisterLink" class="block mx-4 my-2 px-6 py-3 btn-primary text-center rounded-md font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 animated-title section-title">
+                    <span style="animation-delay: 0.1s;">Investasi</span>
+                    <span style="animation-delay: 0.2s;">Mudah,</span>
+                    <span style="animation-delay: 0.3s;">Dampak</span>
+                    <span style="animation-delay: 0.4s;">Nyata.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                    DANAIN menghubungkan Anda dengan proyek-proyek inovatif yang membutuhkan pendanaan. Mulai berinvestasi dan ciptakan perubahan positif.
+                </p>
+                <div class="space-y-4 md:space-y-0 md:space-x-6">
+                    <a href="daftar-proyek.html" id="heroTelusuriProyek" class="btn-primary px-8 py-3 rounded-md text-lg font-semibold inline-block">Telusuri Proyek</a>
+                    <a href="auth.html#signup" id="heroAjukanPendanaan" class="btn-secondary px-8 py-3 rounded-md text-lg font-semibold inline-block">Ajukan Pendanaan</a>
+                </div>
+                 <div class="mt-12 max-w-xl mx-auto">
+                    <div class="relative">
+                        <input type="search" placeholder="Cari proyek atau kategori..." class="w-full py-3 px-5 rounded-lg bg-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-opacity-50" style="border-color: #64FFDA; focus:ring-color: #64FFDA;">
+                        <button class="absolute right-0 top-0 mt-3 mr-4">
+                            <i class="fas fa-search text-gray-400 hover:text-gray-200"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="achievements" class="py-16 md:py-24" style="background-color: #0F2138;">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-16">Pencapaian Kami</h2>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="achievement-card p-8 rounded-lg"><div class="text-5xl font-extrabold mb-3" style="color: #64FFDA;">24%</div><h3 class="text-xl font-semibold text-gray-300">Pertumbuhan Investor Aktif</h3><p class="text-gray-400 text-sm mt-1">Dalam 6 bulan terakhir.</p></div>
+                    <div class="achievement-card p-8 rounded-lg"><div class="text-5xl font-extrabold mb-3" style="color: #64FFDA;">1.5 M+</div><h3 class="text-xl font-semibold text-gray-300">Dana Terkumpul</h3><p class="text-gray-400 text-sm mt-1">Untuk proyek-proyek berdampak.</p></div>
+                    <div class="achievement-card p-8 rounded-lg"><div class="text-5xl font-extrabold mb-3" style="color: #64FFDA;">50+</div><h3 class="text-xl font-semibold text-gray-300">Proyek Terdanai</h3><p class="text-gray-400 text-sm mt-1">Dari berbagai kategori inovatif.</p></div>
+                </div>
+                <div class="mt-12 text-center"><img src="https://placehold.co/800x300/102A43/E0E6F1?text=Visualisasi+Pencapaian+(Opsional)" alt="Visualisasi Pencapaian" class="mx-auto rounded-lg shadow-lg max-w-full h-auto" onerror="this.style.display='none'"></div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-16">Bagaimana DANAIN Bekerja?</h2>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="how-it-works-card p-8 rounded-lg"><div class="flex justify-center mb-6"><i class="fas fa-lightbulb text-5xl" style="color: #64FFDA;"></i></div><h3 class="text-xl font-semibold text-gray-300 mb-2">1. Ajukan Proyekmu</h3><p class="text-gray-400 text-sm">Startup & inovator mempresentasikan ide dan kebutuhan dana mereka.</p></div>
+                    <div class="how-it-works-card p-8 rounded-lg"><div class="flex justify-center mb-6"><i class="fas fa-users text-5xl" style="color: #64FFDA;"></i></div><h3 class="text-xl font-semibold text-gray-300 mb-2">2. Temukan Investor</h3><p class="text-gray-400 text-sm">Investor menelusuri proyek potensial yang sesuai dengan minat mereka.</p></div>
+                    <div class="how-it-works-card p-8 rounded-lg"><div class="flex justify-center mb-6"><i class="fas fa-handshake text-5xl" style="color: #64FFDA;"></i></div><h3 class="text-xl font-semibold text-gray-300 mb-2">3. Investasi & Bertumbuh</h3><p class="text-gray-400 text-sm">Proses investasi yang aman, transparan, dan mendukung pertumbuhan bersama.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendations" class="py-16 md:py-24" style="background-color: #0F2138;">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-16">Proyek Unggulan</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="homepageProjectList">
+                     <p id="loadingHomepageProjects" class="text-center col-span-full text-gray-400">Memuat proyek unggulan...</p>
+                </div>
+                 <div class="text-center mt-12"><a href="daftar-proyek.html" class="btn-secondary px-8 py-3 rounded-md text-lg font-semibold inline-block">Lihat Semua Proyek</a></div>
+            </div>
+        </section>
+
+        <section id="faq" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-16">Pertanyaan Umum (FAQ)</h2>
+                <div class="max-w-3xl mx-auto space-y-3">
+                    <details class="faq-item">
+                        <summary class="flex justify-between items-center font-semibold text-gray-200 group-hover:text-gray-100">
+                            Apa itu DANAIN?
+                            <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="text-gray-400 mt-3 text-sm leading-relaxed">
+                            DANAIN adalah platform pendanaan digital yang menghubungkan para inovator, startup, dan pengelola proyek yang membutuhkan dana dengan calon investor yang ingin mendukung ide-ide brilian dan usaha rintisan. Kami bertujuan mempermudah akses pendanaan dan investasi secara transparan dan aman.
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="flex justify-between items-center font-semibold text-gray-200 group-hover:text-gray-100">
+                            Siapa saja yang bisa mengajukan pendanaan di DANAIN?
+                            <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="text-gray-400 mt-3 text-sm leading-relaxed">
+                            Individu, kelompok, mahasiswa, startup tahap awal, hingga UMKM yang memiliki ide proyek inovatif atau rencana bisnis yang jelas dan membutuhkan pendanaan untuk realisasi atau pengembangannya dapat mengajukan pendanaan melalui DANAIN.
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="flex justify-between items-center font-semibold text-gray-200 group-hover:text-gray-100">
+                            Bagaimana cara saya berinvestasi melalui DANAIN?
+                            <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="text-gray-400 mt-3 text-sm leading-relaxed">
+                            Anda perlu mendaftar sebagai investor di platform kami. Setelah akun Anda terverifikasi, Anda dapat menelusuri berbagai proyek yang tersedia, mempelajari detailnya, dan melakukan investasi sesuai dengan jumlah dan skema yang ditawarkan oleh pengelola proyek. Pastikan Anda memahami risiko yang terlibat sebelum berinvestasi.
+                        </div>
+                    </details>
+                     <details class="faq-item">
+                        <summary class="flex justify-between items-center font-semibold text-gray-200 group-hover:text-gray-100">
+                            Apa saja jenis proyek yang bisa didanai?
+                            <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="text-gray-400 mt-3 text-sm leading-relaxed">
+                            Kami terbuka untuk berbagai jenis proyek dari berbagai kategori seperti teknologi, pendidikan, pertanian, fashion, kesehatan, sosial, properti, dan lainnya, selama proyek tersebut memiliki konsep yang jelas, potensi yang baik, dan diajukan oleh pihak yang kredibel.
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="flex justify-between items-center font-semibold text-gray-200 group-hover:text-gray-100">
+                            Apakah ada biaya untuk menggunakan platform DANAIN?
+                            <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="text-gray-400 mt-3 text-sm leading-relaxed">
+                            Untuk pengelola proyek, mungkin ada biaya platform atau success fee yang dikenakan jika pendanaan berhasil. Untuk investor, biasanya tidak ada biaya langsung untuk berinvestasi, namun detailnya akan dijelaskan dalam syarat dan ketentuan kami. Kami berusaha menjaga struktur biaya sekompetitif dan setransparan mungkin.
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="flex justify-between items-center font-semibold text-gray-200 group-hover:text-gray-100">
+                            Bagaimana keamanan dana saya sebagai investor?
+                            <i class="fas fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="text-gray-400 mt-3 text-sm leading-relaxed">
+                            DANAIN berkomitmen untuk menyediakan platform yang aman. Kami mungkin menggunakan sistem rekening bersama (escrow) atau mekanisme lain untuk melindungi dana investor hingga target pendanaan tercapai atau milestone tertentu terpenuhi. Namun, penting untuk diingat bahwa semua investasi memiliki risiko.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-2xl font-extrabold mb-4" style="color: #64FFDA;">DANAIN</h3>
+                    <p class="text-sm">Menghubungkan inovasi dengan investasi untuk masa depan yang lebih baik dan berdampak.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-200 mb-4">Perusahaan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tentang-kami.html" class="nav-link">Tentang Kami</a></li>
+                        <li><a href="#" class="nav-link">Karir</a></li>
+                        <li><a href="#" class="nav-link">Blog</a></li>
+                        <li><a href="#" class="nav-link">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-200 mb-4">Legal & Bantuan</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="syarat-ketentuan.html" class="nav-link">Syarat & Ketentuan</a></li>
+                        <li><a href="kebijakan-privasi.html" class="nav-link">Kebijakan Privasi</a></li>
+                        <li><a href="#faq" class="nav-link">Pusat Bantuan (FAQ)</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-200 mb-4">Ikuti Kami</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t pt-8 text-center text-sm" style="border-color: #1E2D3D;">
+                <p>© <span id="currentYear"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const demoFeaturedProjects = [
+            { id: 1, namaProyek: 'EduTech AI (Demo Unggulan)', deskripsiSingkat: 'Platform AI untuk belajar...', targetDana: 250000000, danaTerkumpul: 162500000, gambarProyek: 'https://placehold.co/600x400/173A5E/64FFDA?text=EduTech+AI', kategori: 'Teknologi', pemilikProyek: 'Tim Inovasi Edu', sisaHari: 30, lokasi: 'Jakarta', status: 'Pendanaan Aktif' },
+            { id: 2, namaProyek: 'Kopi Organik (Demo Unggulan)', deskripsiSingkat: 'Kopi berkualitas dari petani lokal...', targetDana: 120000000, danaTerkumpul: 48000000, gambarProyek: 'https://placehold.co/600x400/173A5E/64FFDA?text=Kopi+Organik', kategori: 'Pertanian', pemilikProyek: 'Komunitas Desa Lestari', sisaHari: 45, lokasi: 'Bandung', status: 'Pendanaan Aktif' },
+            { id: 3, namaProyek: 'Eco Fashion (Demo Unggulan)', deskripsiSingkat: 'Fashion berkelanjutan dan etis.', targetDana: 300000000, danaTerkumpul: 225000000, gambarProyek: 'https://placehold.co/600x400/173A5E/64FFDA?text=Eco+Fashion', kategori: 'Fashion', pemilikProyek: 'GreenStyle Co.', sisaHari: 60, lokasi: 'Surabaya', status: 'Terdanai' },
+            { id: 4, namaProyek: 'MindWell App (Demo Unggulan)', deskripsiSingkat: 'Akses mudah ke layanan kesehatan mental.', targetDana: 180000000, danaTerkumpul: 90000000, gambarProyek: 'https://placehold.co/600x400/173A5E/64FFDA?text=MindWell', kategori: 'Kesehatan', pemilikProyek: 'Sehat Jiwa ID', sisaHari: 25, lokasi: 'Yogyakarta', status: 'Pendanaan Aktif' }
+        ];
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        function renderHomepageProjectCard(proyek) {
+            const nama = proyek.projectName || proyek.namaProyek || 'Nama Proyek Tidak Ada';
+            const deskripsi = proyek.projectDescription || proyek.deskripsiSingkat || 'Deskripsi tidak tersedia.';
+            const target = parseFloat(proyek.fundingTarget) || parseFloat(proyek.targetDana) || 0;
+            const terkumpul = parseFloat(proyek.danaTerkumpul) || 0;
+            const gambar = proyek.projectImageURL || proyek.gambarProyek || 'https://placehold.co/600x400/173A5E/64FFDA?text=Gambar+Error';
+            const kategori = proyek.projectCategory || proyek.kategori || 'Lainnya';
+            const pemilik = proyek.pemilikProyek || 'Tim Proyek';
+            const durasi = proyek.campaignDuration || proyek.sisaHari || 0;
+            const lokasi = proyek.projectLocation || proyek.lokasi || 'N/A';
+
+            const persentaseTerkumpul = target > 0 ? (terkumpul / target) * 100 : 0;
+            return `
+                <div class="recommendation-card rounded-lg overflow-hidden flex flex-col">
+                    <a href="detail-proyek.html?id=${proyek.id}" class="block hover:opacity-90 transition-opacity">
+                        <img src="${gambar}" alt="Gambar Proyek ${nama}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/173A5E/64FFDA?text=Gambar+Error';">
+                    </a>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-2">
+                             <h3 class="text-lg font-semibold text-gray-100 leading-tight">
+                                <a href="detail-proyek.html?id=${proyek.id}" class="hover:text-gray-300 transition-colors">${nama}</a>
+                            </h3>
+                            <span class="category-tag whitespace-nowrap">${kategori}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-3 flex-grow">${deskripsi.substring(0, 80)}${deskripsi.length > 80 ? '...' : ''}</p>
+                        <div class="text-xs text-gray-500 mb-1">Lokasi: ${lokasi}</div>
+                        <div class="mb-3 mt-auto">
+                            <div class="flex justify-between text-xs text-gray-300 mb-1">
+                                <span>${formatRupiah(terkumpul)}</span>
+                                <span class="font-semibold">${formatRupiah(target)}</span>
+                            </div>
+                            <div class="w-full bg-gray-600 rounded-full h-2">
+                                <div class="h-2 rounded-full" style="width: ${persentaseTerkumpul.toFixed(0)}%; background-color: #64FFDA;"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>${persentaseTerkumpul.toFixed(0)}% terkumpul</span>
+                                <span>${durasi} hari lagi</span>
+                            </div>
+                        </div>
+                        <a href="detail-proyek.html?id=${proyek.id}" class="btn-primary w-full text-center py-2 px-4 rounded-md text-sm font-semibold block mt-2">
+                            Lihat Detail
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        const homepageProjectListContainer = document.getElementById('homepageProjectList');
+        const loadingHomepageProjectsMessage = document.getElementById('loadingHomepageProjects');
+
+        function displayHomepageProjects() {
+            if (homepageProjectListContainer && loadingHomepageProjectsMessage) {
+                homepageProjectListContainer.innerHTML = ''; 
+                
+                let projectsToDisplay = [];
+                const storedProjects = JSON.parse(localStorage.getItem('myProjects')) || [];
+                const publiclyVisibleStoredProjects = storedProjects.filter(p => 
+                    p.status && (p.status.toLowerCase() === 'pendanaan aktif' || p.status.toLowerCase() === 'terdanai')
+                );
+
+                if (publiclyVisibleStoredProjects.length > 0) {
+                    projectsToDisplay = publiclyVisibleStoredProjects.sort((a,b) => (b.id || 0) - (a.id || 0)).slice(0, 4);
+                } else if (demoFeaturedProjects.length > 0) {
+                    projectsToDisplay = demoFeaturedProjects.slice(0, 4);
+                }
+
+                if (projectsToDisplay.length > 0) {
+                    projectsToDisplay.forEach(proyek => {
+                        homepageProjectListContainer.innerHTML += renderHomepageProjectCard(proyek);
+                    });
+                    loadingHomepageProjectsMessage.classList.add('hidden');
+                } else {
+                    loadingHomepageProjectsMessage.textContent = 'Tidak ada proyek unggulan untuk ditampilkan saat ini.';
+                    loadingHomepageProjectsMessage.classList.remove('hidden'); 
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna";
+            const userRole = localStorage.getItem('userRole') || 'startup'; 
+
+            const navAuthLinksDesktop = document.getElementById('navAuthLinksDesktop');
+            const navUserSectionDesktop = document.getElementById('navUserSectionDesktop');
+            
+            const navAuthLinksMobile = document.getElementById('navAuthLinksMobile');
+            const navUserSectionMobile = document.getElementById('navUserSectionMobile');
+
+            const heroAjukanPendanaanButton = document.getElementById('heroAjukanPendanaan');
+            const dashboardLink = document.getElementById('dashboardLink'); 
+            const mobileDashboardLink = document.getElementById('mobileDashboardLink'); 
+
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor.html' : 'dashboard-startup.html';
+            if(dashboardLink) dashboardLink.href = dashboardUrl;
+            if(mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+            if (isUserLoggedIn === 'true') {
+                if(navAuthLinksDesktop) navAuthLinksDesktop.style.display = 'none';
+                if(navUserSectionDesktop) {
+                    navUserSectionDesktop.innerHTML = `
+                        <a href="${dashboardUrl}" class="nav-link mr-4 text-sm">Dashboard Saya</a>
+                        <span class="nav-link mr-3 text-sm">Halo, ${loggedInUserName}!</span>
+                        <a href="#" id="logoutButtonDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>
+                    `;
+                    navUserSectionDesktop.classList.remove('hidden');
+                    navUserSectionDesktop.classList.add('flex', 'items-center');
+                }
+
+                if(navAuthLinksMobile) navAuthLinksMobile.style.display = 'none';
+                if(navUserSectionMobile) {
+                    navUserSectionMobile.innerHTML = `
+                        <a href="${dashboardUrl}" class="block px-6 py-3 nav-link hover:bg-gray-700">Dashboard Saya</a>
+                        <span class="block px-6 py-3 text-gray-300">Halo, ${loggedInUserName}!</span>
+                        <a href="#" id="logoutButtonMobile" class="block mx-4 my-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-center rounded-md font-semibold">Logout</a>
+                    `;
+                    navUserSectionMobile.classList.remove('hidden');
+                    navUserSectionMobile.classList.add('border-t', 'border-gray-700', 'pt-2');
+                }
+                if(heroAjukanPendanaanButton) heroAjukanPendanaanButton.href = userRole === 'startup' ? 'buat-proyek.html' : 'auth.html#signup';
+            } else {
+                if(navAuthLinksDesktop) navAuthLinksDesktop.style.display = 'flex';
+                if(navUserSectionDesktop) navUserSectionDesktop.classList.add('hidden');
+                if(navAuthLinksMobile) navAuthLinksMobile.style.display = 'block'; 
+                if(navUserSectionMobile) navUserSectionMobile.classList.add('hidden');
+                if(heroAjukanPendanaanButton) heroAjukanPendanaanButton.href = 'auth.html#signup';
+            }
+
+            function handleLogout(e) {
+                e.preventDefault();
+                localStorage.removeItem('isUserLoggedIn');
+                localStorage.removeItem('loggedInUserName');
+                localStorage.removeItem('userRole');
+                window.location.reload(); 
+            }
+
+            const logoutButtonDesktop = document.getElementById('logoutButtonDesktop');
+            if(logoutButtonDesktop) logoutButtonDesktop.addEventListener('click', handleLogout);
+            const logoutButtonMobile = document.getElementById('logoutButtonMobile');
+            if(logoutButtonMobile) logoutButtonMobile.addEventListener('click', handleLogout);
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            const currentYearElement = document.getElementById('currentYear');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
+            
+            const animatedTitleSpans = document.querySelectorAll('.animated-title span');
+            animatedTitleSpans.forEach((span, index) => {
+                span.style.animationDelay = `${index * 0.1 + 0.1}s`;
+            });
+
+            document.querySelectorAll('a[href^="#"]:not([href="#login"]):not([href="#signup"])').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if(mobileMenu && !mobileMenu.classList.contains('hidden')){
+                         mobileMenu.classList.add('hidden'); 
+                    }
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            displayHomepageProjects();
+        });
+    </script>
+
+</body>
+</html>

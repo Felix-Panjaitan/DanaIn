@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profil - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        .top-navbar {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+            height: 4.5rem; 
+        }
+        .top-navbar-link { color: #A8B2D1; transition: color 0.2s ease; }
+        .top-navbar-link:hover, .top-navbar-link.active { color: #64FFDA; }
+        .top-navbar-link.active { font-weight: 600; }
+
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary { 
+            background-color: #1E2D3D;
+            color: #A8B2D1;
+            border: 1px solid #3E4C5B;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #3E4C5B;
+            border-color: #64FFDA;
+            color: #64FFDA;
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .form-section {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .form-label {
+            display: block;
+            color: #A8B2D1;
+            margin-bottom: 8px;
+            font-size: 0.875rem; 
+            font-weight: 500;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #0A192F; 
+            border: 1px solid #3E4C5B; 
+            border-radius: 6px; 
+            color: #E0E6F1; 
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #64FFDA; 
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+        }
+        .form-input[readonly] {
+            background-color: #1E2D3D; 
+            color: #8892B0;
+            cursor: not-allowed;
+        }
+        .error-message {
+            color: #ff9090; 
+            font-size: 0.75rem; 
+            margin-top: 4px;
+            display: none; 
+        }
+        .form-input.error, .form-textarea.error, .form-select.error {
+            border-color: #ff7575;
+        }
+        .form-input.success, .form-textarea.success, .form-select.success {
+            border-color: #64FFDA;
+        }
+        .success-popup {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #102A43;
+            color: #64FFDA;
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid #64FFDA;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+        }
+        .success-popup.show {
+            opacity: 1;
+            visibility: visible;
+            top: 30px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="successPopup" class="success-popup">Profil berhasil diperbarui!</div>
+
+    <header class="top-navbar sticky top-0 z-50">
+        <nav class="container mx-auto px-6 h-full flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="daftar-proyek.html" class="top-navbar-link">Telusuri Proyek</a>
+                <a href="#" id="dashboardLink" class="top-navbar-link">Dashboard Saya</a> <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+                <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="topMobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="topMobileMenu" class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg">
+            <a href="daftar-proyek.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Telusuri Proyek</a>
+            <a href="#" id="mobileDashboardLink" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Dashboard Saya</a>
+            <div id="topNavUserSectionMobile" class="hidden border-t border-gray-700 mt-2 pt-2"></div>
+            <div id="topNavAuthLinksMobile" class="border-t border-gray-700 mt-2 pt-2">
+                <a href="auth.html#login" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Masuk</a>
+                <a href="auth.html#signup" class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="editProfileContent" class="opacity-0 transition-opacity duration-500 ease-in-out">
+            <div class="mb-8 md:mb-12">
+                 <a href="#" id="backToDashboardLink" class="inline-flex items-center text-sm text-blue-400 hover:text-blue-300 mb-4">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+                </a>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-100">Edit Profil Anda</h1>
+                <p class="text-lg text-gray-400 mt-2 max-w-2xl">Perbarui informasi akun Anda di bawah ini.</p>
+            </div>
+
+            <form id="editProfileForm" class="max-w-xl mx-auto" novalidate>
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Informasi Akun</h2>
+                    <div>
+                        <label for="profileFullName" class="form-label">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input type="text" id="profileFullName" name="profileFullName" class="form-input" required>
+                        <p class="error-message"></p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="profileUsername" class="form-label">Username <span class="text-red-500">*</span></label>
+                        <input type="text" id="profileUsername" name="profileUsername" class="form-input" required>
+                        <p class="error-message"></p>
+                    </div>
+                     <div class="mt-6">
+                        <label for="profileEmail" class="form-label">Email</label>
+                        <input type="email" id="profileEmail" name="profileEmail" class="form-input" readonly>
+                        <p class="text-xs text-gray-500 mt-1">Email tidak dapat diubah.</p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="profileRole" class="form-label">Peran Akun</label>
+                        <input type="text" id="profileRole" name="profileRole" class="form-input" readonly>
+                         <p class="text-xs text-gray-500 mt-1">Peran akun tidak dapat diubah.</p>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Ubah Kata Sandi (Opsional)</h2>
+                    <div class="mt-6">
+                        <label for="profileCurrentPassword" class="form-label">Kata Sandi Saat Ini (Demo)</label>
+                        <input type="password" id="profileCurrentPassword" name="profileCurrentPassword" class="form-input" placeholder="Masukkan kata sandi saat ini">
+                        <p class="error-message"></p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="profileNewPassword" class="form-label">Kata Sandi Baru</label>
+                        <input type="password" id="profileNewPassword" name="profileNewPassword" class="form-input" placeholder="Minimal 6 karakter">
+                        <p class="error-message"></p>
+                    </div>
+                    <div class="mt-6">
+                        <label for="profileConfirmPassword" class="form-label">Konfirmasi Kata Sandi Baru</label>
+                        <input type="password" id="profileConfirmPassword" name="profileConfirmPassword" class="form-input" placeholder="Ulangi kata sandi baru">
+                        <p class="error-message"></p>
+                    </div>
+                     <p class="text-xs text-gray-500 mt-4">Kosongkan field kata sandi jika Anda tidak ingin mengubahnya.</p>
+                </section>
+
+                <div class="mt-10 flex justify-end gap-4">
+                    <a href="#" id="cancelEditButton" class="btn-secondary px-8 py-3 rounded-md font-semibold">Batal</a>
+                    <button type="submit" class="btn-primary px-8 py-3 rounded-md font-semibold">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>© <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editProfileContent = document.getElementById('editProfileContent');
+            const successPopup = document.getElementById('successPopup');
+            const form = document.getElementById('editProfileForm');
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna"; 
+            const userRole = localStorage.getItem('userRole') || "startup"; 
+            const userEmailDemo = localStorage.getItem('demoUserEmail') || "email@example.com"; 
+            const userPasswordDemo = localStorage.getItem('demoUserPassword') || ""; 
+
+            const topNavAuthLinksDesktop = document.getElementById('topNavAuthLinksDesktop');
+            const topNavUserSectionDesktop = document.getElementById('topNavUserSectionDesktop');
+            const topNavAuthLinksMobile = document.getElementById('topNavAuthLinksMobile');
+            const topNavUserSectionMobile = document.getElementById('topNavUserSectionMobile');
+            const dashboardLink = document.getElementById('dashboardLink');
+            const mobileDashboardLink = document.getElementById('mobileDashboardLink');
+            const backToDashboardLink = document.getElementById('backToDashboardLink');
+            const cancelEditButton = document.getElementById('cancelEditButton');
+
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor.html' : 'dashboard-startup.html';
+            if(dashboardLink) dashboardLink.href = dashboardUrl;
+            if(mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+            if(backToDashboardLink) backToDashboardLink.href = dashboardUrl;
+            if(cancelEditButton) cancelEditButton.href = dashboardUrl;
+
+
+            if (isUserLoggedIn !== 'true') {
+                window.location.href = `auth.html#login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+                return; 
+            }
+
+            editProfileContent.classList.remove('opacity-0');
+            editProfileContent.style.opacity = '1';
+
+            if (isUserLoggedIn === 'true') {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'none';
+                if(topNavUserSectionDesktop) {
+                    topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+                    topNavUserSectionDesktop.classList.remove('hidden');
+                    topNavUserSectionDesktop.classList.add('flex', 'items-center');
+                    setupLogoutButton('logoutButtonTopDesktop');
+                }
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'none';
+                if(topNavUserSectionMobile) {
+                    topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+                    topNavUserSectionMobile.classList.remove('hidden');
+                     setupLogoutButton('logoutButtonTopMobile');
+                }
+            }
+            
+            function setupLogoutButton(buttonId) {
+                const logoutButton = document.getElementById(buttonId);
+                if (logoutButton) {
+                    logoutButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isUserLoggedIn');
+                        localStorage.removeItem('loggedInUserName');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('demoUserEmail');
+                        localStorage.removeItem('demoUserPassword');
+                        window.location.href = 'index.html';
+                    });
+                }
+            }
+
+            const topMobileMenuButton = document.getElementById('topMobileMenuButton');
+            const topMobileMenu = document.getElementById('topMobileMenu');
+            if(topMobileMenuButton && topMobileMenu) {
+                topMobileMenuButton.addEventListener('click', function() { topMobileMenu.classList.toggle('hidden'); });
+                 document.addEventListener('click', function(event) {
+                    if (!topMobileMenuButton.contains(event.target) && !topMobileMenu.contains(event.target)) {
+                        topMobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            const currentYearFooter = document.getElementById('currentYearFooter');
+            if(currentYearFooter) currentYearFooter.textContent = new Date().getFullYear();
+            const profileFullNameInput = document.getElementById('profileFullName');
+            const profileUsernameInput = document.getElementById('profileUsername');
+            const profileEmailInput = document.getElementById('profileEmail');
+            const profileRoleInput = document.getElementById('profileRole');
+            const currentPasswordInput = document.getElementById('profileCurrentPassword');
+            const newPasswordInput = document.getElementById('profileNewPassword');
+            const confirmPasswordInput = document.getElementById('profileConfirmPassword');
+
+            if(profileFullNameInput) profileFullNameInput.value = loggedInUserName;
+            if(profileUsernameInput) profileUsernameInput.value = localStorage.getItem('demoUserUsername') || loggedInUserName.toLowerCase().replace(/\s+/g, ''); 
+            if(profileEmailInput) profileEmailInput.value = userEmailDemo;
+            if(profileRoleInput) profileRoleInput.value = userRole.charAt(0).toUpperCase() + userRole.slice(1); 
+
+
+            
+            const requiredInputs = form.querySelectorAll('input[required]'); 
+            
+            function validateField(field) {
+                let isValid = true;
+                let errorMessageText = "";
+                const errorDisplay = field.parentElement.querySelector('.error-message');
+                
+                field.classList.remove('error', 'success');
+                if(errorDisplay) errorDisplay.style.display = 'none';
+
+                if (field.hasAttribute('required') && field.value.trim() === '') {
+                    isValid = false;
+                    errorMessageText = "Kolom ini wajib diisi.";
+                } else if (field.id === 'profileUsername' && (field.value.length < 3 || !/^[a-zA-Z0-9_]+$/.test(field.value))) {
+                    isValid = false;
+                    errorMessageText = "Username minimal 3 karakter, hanya huruf, angka, dan underscore.";
+                }
+
+                if (!isValid) {
+                    field.classList.add('error');
+                    if(errorDisplay) {
+                        errorDisplay.textContent = errorMessageText;
+                        errorDisplay.style.display = 'block';
+                    }
+                } else if (field.value.trim() !== '') {
+                    field.classList.add('success');
+                }
+                return isValid;
+            }
+            
+            requiredInputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', () => {
+                     if(input.classList.contains('error')){
+                        input.classList.remove('error');
+                        const errorDisplay = input.parentElement.querySelector('.error-message');
+                        if(errorDisplay) errorDisplay.style.display = 'none';
+                     }
+                });
+            });
+
+            function validatePasswordFields() {
+                let isValid = true;
+                const currentPasswordError = currentPasswordInput.parentElement.querySelector('.error-message');
+                const newPasswordError = newPasswordInput.parentElement.querySelector('.error-message');
+                const confirmPasswordError = confirmPasswordInput.parentElement.querySelector('.error-message');
+
+                [currentPasswordInput, newPasswordInput, confirmPasswordInput].forEach(f => f.classList.remove('error', 'success'));
+                [currentPasswordError, newPasswordError, confirmPasswordError].forEach(e => e.style.display = 'none');
+
+                if (newPasswordInput.value.trim() !== '' || confirmPasswordInput.value.trim() !== '') {
+                    if (currentPasswordInput.value !== userPasswordDemo) {
+                        currentPasswordInput.classList.add('error');
+                        currentPasswordError.textContent = "Kata sandi saat ini tidak cocok (Demo).";
+                        currentPasswordError.style.display = 'block';
+                        isValid = false;
+                    } else if (currentPasswordInput.value.trim() !== '') {
+                         currentPasswordInput.classList.add('success');
+                    }
+
+                    if (newPasswordInput.value.length < 6) {
+                        newPasswordInput.classList.add('error');
+                        newPasswordError.textContent = "Kata sandi baru minimal 6 karakter.";
+                        newPasswordError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        newPasswordInput.classList.add('success');
+                    }
+
+                    if (confirmPasswordInput.value !== newPasswordInput.value) {
+                        confirmPasswordInput.classList.add('error');
+                        confirmPasswordError.textContent = "Konfirmasi kata sandi tidak cocok.";
+                        confirmPasswordError.style.display = 'block';
+                        isValid = false;
+                    } else if (confirmPasswordInput.value.trim() !== '') {
+                        confirmPasswordInput.classList.add('success');
+                    }
+                }
+                return isValid;
+            }
+            
+            [currentPasswordInput, newPasswordInput, confirmPasswordInput].forEach(input => {
+                 input.addEventListener('input', () => { 
+                     if(input.classList.contains('error')){
+                        input.classList.remove('error');
+                        const errorDisplay = input.parentElement.querySelector('.error-message');
+                        if(errorDisplay) errorDisplay.style.display = 'none';
+                     }
+                });
+            });
+
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let isFormValid = true;
+                requiredInputs.forEach(input => {
+                    if (!validateField(input)) {
+                        isFormValid = false;
+                    }
+                });
+
+                if (newPasswordInput.value.trim() !== '' || confirmPasswordInput.value.trim() !== '') {
+                    if (!validatePasswordFields()) {
+                        isFormValid = false;
+                    }
+                }
+
+
+                if (isFormValid) {
+                    localStorage.setItem('loggedInUserName', profileFullNameInput.value);
+                    localStorage.setItem('demoUserUsername', profileUsernameInput.value); 
+
+                    if (newPasswordInput.value.trim() !== '' && currentPasswordInput.value === userPasswordDemo) {
+                        localStorage.setItem('demoUserPassword', newPasswordInput.value);
+                    }
+                    
+                    console.log('Profil diperbarui:', {
+                        nama: profileFullNameInput.value,
+                        username: profileUsernameInput.value,
+                    });
+                    
+                    successPopup.textContent = `Profil berhasil diperbarui!`;
+                    successPopup.classList.add('show');
+
+                    setTimeout(() => {
+                        successPopup.classList.remove('show');
+                        window.location.href = dashboardUrl; 
+                    }, 2000);
+
+                } else {
+                    alert('Harap perbaiki semua error pada form sebelum menyimpan.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

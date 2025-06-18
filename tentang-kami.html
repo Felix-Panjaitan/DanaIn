@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Kami - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        .top-navbar {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+            height: 4.5rem; 
+        }
+        .top-navbar-link { color: #A8B2D1; transition: color 0.2s ease; }
+        .top-navbar-link:hover, .top-navbar-link.active { color: #64FFDA; }
+        .top-navbar-link.active { font-weight: 600; }
+
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary { 
+            background-color: #1E2D3D;
+            color: #A8B2D1;
+            border: 1px solid #3E4C5B;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #3E4C5B;
+            border-color: #64FFDA;
+            color: #64FFDA;
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .content-section {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .team-member-card {
+            background-color: #0F2138;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .team-member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(100, 255, 218, 0.1);
+        }
+        .team-member-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            border: 3px solid #64FFDA;
+        }
+        .hero-about {
+            background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('https://placehold.co/1200x400/0A192F/1E2D3D?text=Inovasi+Bersama') no-repeat center center;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="top-navbar sticky top-0 z-50">
+        <nav class="container mx-auto px-6 h-full flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="daftar-proyek.html" class="top-navbar-link">Telusuri Proyek</a>
+                <a href="#" id="dashboardLink" class="top-navbar-link">Dashboard Saya</a>
+                <a href="tentang-kami.html" class="top-navbar-link active">Tentang Kami</a>
+                <a href="index.html#faq" class="top-navbar-link">FAQ</a>
+                <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+                <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="topMobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="topMobileMenu" class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg">
+            <a href="daftar-proyek.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Telusuri Proyek</a>
+            <a href="#" id="mobileDashboardLink" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Dashboard Saya</a>
+            <a href="tentang-kami.html" class="block px-4 py-2 text-sm text-gray-100 bg-gray-700 font-semibold">Tentang Kami</a>
+            <a href="index.html#faq" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">FAQ</a>
+            <div id="topNavUserSectionMobile" class="hidden border-t border-gray-700 mt-2 pt-2"></div>
+            <div id="topNavAuthLinksMobile" class="border-t border-gray-700 mt-2 pt-2">
+                <a href="auth.html#login" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Masuk</a>
+                <a href="auth.html#signup" class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-about py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Tentang DANAIN</h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                    Menjembatani inovasi dengan investasi untuk masa depan yang lebih cerah dan inklusif.
+                </p>
+            </div>
+        </section>
+
+        <div class="container mx-auto px-6 py-12 md:py-16">
+            <section class="content-section">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-100 mb-4">Visi Kami</h2>
+                        <p class="text-gray-300 leading-relaxed mb-6">
+                            Menjadi platform pendanaan terdepan yang memberdayakan setiap individu dan startup inovatif untuk mewujudkan potensi penuh mereka, menciptakan ekosistem investasi yang transparan, adil, dan berdampak positif bagi kemajuan ekonomi Indonesia.
+                        </p>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-100 mb-4">Misi Kami</h2>
+                        <ul class="list-disc list-inside text-gray-300 space-y-2 leading-relaxed">
+                            <li>Menyediakan akses pendanaan yang mudah dan cepat bagi startup dan proyek inovatif.</li>
+                            <li>Menghubungkan investor dengan peluang investasi yang relevan dan potensial.</li>
+                            <li>Membangun komunitas yang kolaboratif antara pencari dana dan pemberi dana.</li>
+                            <li>Mengedepankan transparansi, akuntabilitas, dan keamanan dalam setiap transaksi.</li>
+                            <li>Mendorong pertumbuhan ekonomi kreatif dan usaha kecil menengah di Indonesia.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2 class="text-3xl font-bold text-gray-100 mb-6 text-center">Cerita di Balik DANAIN</h2>
+                <div class="max-w-3xl mx-auto text-gray-300 leading-relaxed space-y-4">
+                    <p>
+                        DANAIN lahir dari sebuah pengamatan sederhana: banyak ide brilian dan proyek inovatif, terutama dari kalangan mahasiswa dan masyarakat kelas bawah, seringkali terhenti langkahnya karena keterbatasan akses terhadap pendanaan. Di sisi lain, banyak calon investor yang memiliki keinginan untuk berkontribusi namun kesulitan menemukan platform yang tepat untuk menyalurkan dukungannya kepada usaha-usaha rintisan.
+                    </p>
+                    <p>
+                        Permasalahan dalam memperoleh investasi menjadi tantangan utama. Proses pengajuan di lembaga keuangan formal seringkali rumit dan mensyaratkan rekam jejak yang belum dimiliki oleh para pemula. Akibatnya, potensi besar gagal berkembang bukan karena kurangnya kreativitas, melainkan karena terbatasnya modal.
+                    </p>
+                    <p>
+                        Terinspirasi dari model pendanaan sukses seperti Shark Tank, Dragon's Den, serta platform berbasis komunitas seperti Trakteer dan Gank.me, kami bercita-cita menciptakan sebuah jembatan digital. DANAIN dirancang untuk mempertemukan para inovator dengan investor secara langsung, dengan proses yang lebih mudah diakses, transparan, dan fleksibel.
+                    </p>
+                    <p>
+                        Kami percaya bahwa setiap ide berharga layak mendapatkan kesempatan. Dengan DANAIN, kami berharap dapat membangun ekosistem investasi yang lebih inklusif, di mana setiap orang dapat berpartisipasi dalam mendorong kemajuan dan menciptakan dampak positif.
+                    </p>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2 class="text-3xl font-bold text-gray-100 mb-8 text-center">Tim Kami</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center">
+                    <div class="team-member-card">
+                        <img src="https://placehold.co/200x200/0A192F/64FFDA?text=CFP" alt="Foto Christian Felix Panjaitan">
+                        <h3 class="text-xl font-semibold text-gray-100 mb-1">Christian Felix P.</h3>
+                        <p class="text-sm text-gray-400 mb-2">Chief Executive Officer</p>
+                        <p class="text-xs text-gray-500">"Memimpin visi dan strategi keseluruhan DANAIN."</p>
+                    </div>
+                    <div class="team-member-card">
+                        <img src="https://placehold.co/200x200/0A192F/64FFDA?text=FDR" alt="Foto Fernando Darren Rachman">
+                        <h3 class="text-xl font-semibold text-gray-100 mb-1">Fernando Darren R.</h3>
+                        <p class="text-sm text-gray-400 mb-2">Chief Technology Officer</p>
+                        <p class="text-xs text-gray-500">"Membangun teknologi platform yang inovatif dan andal."</p>
+                    </div>
+                    <div class="team-member-card">
+                        <img src="https://placehold.co/200x200/0A192F/64FFDA?text=BKS" alt="Foto Brainardo Kenneth Siahu">
+                        <h3 class="text-xl font-semibold text-gray-100 mb-1">Brainardo Kenneth S.</h3>
+                        <p class="text-sm text-gray-400 mb-2">Chief Marketing Officer</p>
+                        <p class="text-xs text-gray-500">"Menghubungkan DANAIN dengan para inovator dan investor."</p>
+                    </div>
+                    <div class="team-member-card">
+                        <img src="https://placehold.co/200x200/0A192F/64FFDA?text=PRPA" alt="Foto Putri Rizkia P. Alifuddin">
+                        <h3 class="text-xl font-semibold text-gray-100 mb-1">Putri Rizkia P. A.</h3>
+                        <p class="text-sm text-gray-400 mb-2">Chief Operating Officer</p>
+                        <p class="text-xs text-gray-500">"Memastikan operasional DANAIN berjalan lancar dan efisien."</p>
+                    </div>
+                    <div class="team-member-card">
+                        <img src="https://placehold.co/200x200/0A192F/64FFDA?text=VNL" alt="Foto Velicia Nissy Lonteng">
+                        <h3 class="text-xl font-semibold text-gray-100 mb-1">Velicia Nissy L.</h3>
+                        <p class="text-sm text-gray-400 mb-2">Chief Financial Officer</p>
+                        <p class="text-xs text-gray-500">"Mengelola aspek keuangan dan pertumbuhan strategis DANAIN."</p>
+                    </div>
+                </div>
+            </section>
+            <section class="text-center py-12">
+                <h2 class="text-2xl font-semibold text-gray-100 mb-4">Siap Bergabung dengan Kami?</h2>
+                <p class="text-gray-400 mb-8 max-w-xl mx-auto">Baik Anda seorang inovator dengan ide brilian atau investor yang mencari peluang berdampak, DANAIN adalah tempatnya.</p>
+                <div class="space-x-4">
+                    <a href="auth.html#signup" class="btn-primary px-8 py-3 rounded-md text-lg font-semibold">Daftar Sekarang</a>
+                    <a href="daftar-proyek.html" class="btn-secondary px-8 py-3 rounded-md text-lg font-semibold">Telusuri Proyek</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>© <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna"; 
+            const userRole = localStorage.getItem('userRole') || "startup"; 
+
+            const topNavAuthLinksDesktop = document.getElementById('topNavAuthLinksDesktop');
+            const topNavUserSectionDesktop = document.getElementById('topNavUserSectionDesktop');
+            const topNavAuthLinksMobile = document.getElementById('topNavAuthLinksMobile');
+            const topNavUserSectionMobile = document.getElementById('topNavUserSectionMobile');
+            const dashboardLink = document.getElementById('dashboardLink');
+            const mobileDashboardLink = document.getElementById('mobileDashboardLink');
+            
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor.html' : 'dashboard-startup.html';
+            if(dashboardLink) dashboardLink.href = dashboardUrl;
+            if(mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+
+            if (isUserLoggedIn === 'true') {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'none';
+                if(topNavUserSectionDesktop) {
+                    topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+                    topNavUserSectionDesktop.classList.remove('hidden');
+                    topNavUserSectionDesktop.classList.add('flex', 'items-center');
+                    setupLogoutButton('logoutButtonTopDesktop');
+                }
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'none';
+                if(topNavUserSectionMobile) {
+                    topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+                    topNavUserSectionMobile.classList.remove('hidden');
+                     setupLogoutButton('logoutButtonTopMobile');
+                }
+            } else {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'flex';
+                if(topNavUserSectionDesktop) topNavUserSectionDesktop.classList.add('hidden');
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'block';
+                if(topNavUserSectionMobile) topNavUserSectionMobile.classList.add('hidden');
+            }
+            
+            function setupLogoutButton(buttonId) {
+                const logoutButton = document.getElementById(buttonId);
+                if (logoutButton) {
+                    logoutButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isUserLoggedIn');
+                        localStorage.removeItem('loggedInUserName');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('demoUserEmail');
+                        localStorage.removeItem('demoUserPassword');
+                        localStorage.removeItem('demoUserUsername');
+                        window.location.href = 'index.html';
+                    });
+                }
+            }
+
+            const topMobileMenuButton = document.getElementById('topMobileMenuButton');
+            const topMobileMenu = document.getElementById('topMobileMenu');
+            if(topMobileMenuButton && topMobileMenu) {
+                topMobileMenuButton.addEventListener('click', function() { topMobileMenu.classList.toggle('hidden'); });
+                 document.addEventListener('click', function(event) { 
+                    if (!topMobileMenuButton.contains(event.target) && !topMobileMenu.contains(event.target)) {
+                        topMobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            const currentYearFooter = document.getElementById('currentYearFooter');
+            if(currentYearFooter) currentYearFooter.textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Proyek - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        .navbar-bg {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+        }
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #64FFDA;
+            border: 1px solid #64FFDA;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.1);
+        }
+        .btn-outline-accent { 
+            background-color: transparent;
+            color: #64FFDA;
+            border: 1px solid #64FFDA;
+            transition: all 0.2s ease;
+        }
+        .btn-outline-accent:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+        .btn-outline-accent.saved { 
+            background-color: #64FFDA;
+            color: #0A192F;
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .progress-bar-bg { background-color: #1E2D3D; }
+        .progress-bar-fill { background-color: #64FFDA; }
+        .section-card {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .youtube-embed-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; 
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .youtube-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #A8B2D1;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+        .tab-button.active {
+            color: #64FFDA;
+            border-bottom-color: #64FFDA;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+            padding-top: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #102A43;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #1E2D3D;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+        .form-label-modal { color: #A8B2D1; margin-bottom: 6px; font-size: 0.875rem;}
+        .form-input-modal {
+            width: 100%; padding: 10px 14px; background-color: #0A192F; 
+            border: 1px solid #3E4C5B; border-radius: 6px; color: #E0E6F1;
+        }
+        .form-input-modal:focus { outline: none; border-color: #64FFDA; box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2); }
+        .error-message-modal { color: #ff9090; font-size: 0.75rem; margin-top: 4px; display: none;}
+
+        .success-popup {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #102A43;
+            color: #64FFDA;
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid #64FFDA;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+        }
+        .success-popup.show {
+            opacity: 1;
+            visibility: visible;
+            top: 30px;
+        }
+        .update-item-detail {
+            background-color: #0F2138;
+            border: 1px solid #1E2D3D;
+            border-left-width: 4px;
+            border-left-color: #64FFDA;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="successInvestmentPopup" class="success-popup">Investasi berhasil dicatat!</div>
+    <div id="successSaveProjectPopup" class="success-popup">Proyek disimpan!</div>
+
+
+    <div id="investmentModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-gray-100">Investasi pada Proyek</h3>
+                <button id="closeInvestmentModal" class="text-gray-400 hover:text-gray-200">×</button>
+            </div>
+            <p class="text-sm text-gray-300 mb-2">Anda akan berinvestasi pada proyek:</p>
+            <h4 id="modalProjectName" class="text-lg font-semibold text-gray-100 mb-4">Nama Proyek Tampil Di Sini</h4>
+            <form id="investmentForm" novalidate>
+                <div class="mb-4">
+                    <label for="investmentAmount" class="form-label-modal">Jumlah Investasi (IDR) <span class="text-red-500">*</span></label>
+                    <input type="number" id="investmentAmount" name="investmentAmount" class="form-input-modal" placeholder="Contoh: 5000000" required min="100000">
+                    <p id="investmentAmountError" class="error-message-modal">Jumlah investasi tidak valid.</p>
+                </div>
+                <div class="mb-6">
+                    <label class="flex items-center text-sm text-gray-400">
+                        <input type="checkbox" id="confirmTerms" name="confirmTerms" class="mr-2 bg-gray-700 border-gray-600 text-green-400 focus:ring-green-500" required>
+                        Saya telah membaca dan menyetujui <a href="#" class="text-blue-400 hover:underline ml-1">syarat & ketentuan investasi</a>.
+                    </label>
+                     <p id="confirmTermsError" class="error-message-modal">Anda harus menyetujui syarat & ketentuan.</p>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancelInvestmentButton" class="btn-secondary px-6 py-2 rounded-md text-sm">Batal</button>
+                    <button type="submit" class="btn-primary px-6 py-2 rounded-md text-sm">Konfirmasi Investasi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <header class="navbar-bg sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html#achievements" class="hover:text-gray-300">Pencapaian</a>
+                <a href="index.html#how-it-works" class="hover:text-gray-300">Cara Kerja</a>
+                <a href="daftar-proyek.html" class="hover:text-gray-300">Telusuri Proyek</a>
+                <a href="index.html#faq" class="hover:text-gray-300">FAQ</a>
+                <div id="navUserSectionDesktop" class="hidden items-center"></div>
+                <div id="navAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" id="navLoginLinkDesktop" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" id="navRegisterLinkDesktop" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="focus:outline-none"><i class="fas fa-bars text-2xl" style="color: #64FFDA;"></i></button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-opacity-95 backdrop-blur-md" style="background-color: #0c1f3a;">
+            <a href="index.html#achievements" class="block px-6 py-3 hover:bg-gray-700">Pencapaian</a>
+            <a href="index.html#how-it-works" class="block px-6 py-3 hover:bg-gray-700">Cara Kerja</a>
+            <a href="daftar-proyek.html" class="block px-6 py-3 hover:bg-gray-700">Telusuri Proyek</a>
+            <a href="index.html#faq" class="block px-6 py-3 hover:bg-gray-700">FAQ</a>
+            <div id="navUserSectionMobile" class="hidden"></div>
+            <div id="navAuthLinksMobile">
+                <a href="auth.html#login" id="mobileNavLoginLink" class="block px-6 py-3 hover:bg-gray-700">Masuk</a>
+                <a href="auth.html#signup" id="mobileNavRegisterLink" class="block mx-4 my-2 px-6 py-3 btn-primary text-center rounded-md font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="projectDetailContainer" class="opacity-0 transition-opacity duration-500 ease-in-out">
+            <nav class="text-sm mb-6 text-gray-400">
+                <a href="index.html" class="hover:text-gray-200">Beranda</a> > 
+                <a href="daftar-proyek.html" class="hover:text-gray-200">Telusuri Proyek</a> > 
+                <span id="breadcrumbProjectName" class="text-gray-200">Nama Proyek</span>
+            </nav>
+            <div class="lg:flex lg:gap-8">
+                <div class="lg:w-2/3">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h1 id="projectTitle" class="text-3xl md:text-4xl font-bold text-gray-100 mb-1">Memuat Nama Proyek...</h1>
+                            <p id="projectCategory" class="text-lg text-gray-400 mb-1">Kategori</p>
+                        </div>
+                        <button id="saveProjectButton" class="btn-outline-accent px-4 py-2 rounded-md text-sm font-semibold inline-flex items-center self-start">
+                            <i class="far fa-bookmark mr-2"></i>
+                            <span>Simpan Proyek</span>
+                        </button>
+                    </div>
+                    <p id="projectTagline" class="text-xl text-gray-300 mb-6">Tagline proyek...</p>
+                    <div id="projectMediaContainer" class="mb-8">
+                        <img id="projectImage" src="https://placehold.co/800x450/102A43/1E2D3D?text=Memuat+Gambar..." alt="Gambar Proyek" class="w-full rounded-lg shadow-lg">
+                        <div id="projectVideo" class="hidden youtube-embed-container"></div>
+                    </div>
+                    <div class="border-b border-gray-700 mb-6">
+                        <nav class="flex space-x-4" id="tabNav">
+                            <button data-tab="deskripsi" class="tab-button active">Deskripsi</button>
+                            <button data-tab="update" class="tab-button">Update</button>
+                            <button data-tab="dokumen" class="tab-button">Dokumen</button>
+                            <button data-tab="risiko" class="tab-button">Risiko & Tantangan</button>
+                        </nav>
+                    </div>
+                    <div id="tabContentContainer">
+                        <div id="deskripsiContent" class="tab-content active"><h2 class="text-2xl font-semibold text-gray-200 mb-3">Tentang Proyek Ini</h2><p id="projectDescription" class="text-gray-300 leading-relaxed whitespace-pre-line">Memuat...</p></div>
+                        <div id="updateContent" class="tab-content"><h2 class="text-2xl font-semibold text-gray-200 mb-3">Perkembangan Proyek</h2><div id="projectUpdatesList" class="space-y-4">Memuat update...</div></div>
+                        <div id="dokumenContent" class="tab-content"><h2 class="text-2xl font-semibold text-gray-200 mb-3">Dokumen Proyek</h2><ul id="projectDocumentsList" class="list-disc list-inside text-gray-300 space-y-2">Memuat...</ul></div>
+                        <div id="risikoContent" class="tab-content"><h2 class="text-2xl font-semibold text-gray-200 mb-3">Risiko & Tantangan</h2><p id="projectRisks" class="text-gray-300 leading-relaxed whitespace-pre-line">Memuat...</p></div>
+                    </div>
+                </div>
+                <div class="lg:w-1/3 mt-10 lg:mt-0">
+                    <div class="section-card sticky top-24"> 
+                        <h2 class="text-xl font-semibold text-gray-200 mb-4">Progres Pendanaan</h2>
+                        <div class="mb-1"><span id="danaTerkumpul" class="text-2xl font-bold text-gray-100">Rp 0</span><span class="text-gray-400 text-sm"> dari <span id="targetDana">Rp 0</span></span></div>
+                        <div class="w-full progress-bar-bg rounded-full h-3 mb-1"><div id="progressBar" class="progress-bar-fill h-3 rounded-full" style="width: 0%;"></div></div>
+                        <div class="flex justify-between text-sm text-gray-400 mb-4"><span id="persentaseTerkumpul">0% terkumpul</span><span id="sisaHari">0 hari lagi</span></div>
+                        <button id="investButton" class="btn-primary w-full py-3 text-lg font-semibold mb-4"><i class="fas fa-rocket mr-2"></i>Investasi Sekarang</button>
+                        <h3 class="text-lg font-semibold text-gray-200 mt-6 mb-2">Skema untuk Investor</h3><p id="skemaInvestasi" class="text-sm text-gray-400 mb-6">...</p>
+                        <hr class="border-gray-700 my-6">
+                        <h3 class="text-lg font-semibold text-gray-200 mb-3">Pengelola Proyek</h3>
+                        <div class="flex items-center mb-4">
+                            <img id="pemilikAvatar" src="https://placehold.co/60x60/0A192F/1E2D3D?text=P" alt="Avatar Pemilik" class="w-12 h-12 rounded-full mr-4">
+                            <div><p id="pemilikNama" class="font-semibold text-gray-100">Nama Pemilik</p><a id="pemilikWebsite" href="#" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-400 hover:text-blue-300 hidden">Kunjungi Website</a></div>
+                        </div>
+                        <p id="pemilikProfil" class="text-sm text-gray-400 mb-4">...</p>
+                        <button id="contactButton" class="btn-secondary w-full py-2.5 text-sm"><i class="fas fa-envelope mr-2"></i> Hubungi Pengelola Proyek</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="projectNotFound" class="hidden text-center py-20">
+            <i class="fas fa-exclamation-circle text-5xl text-red-500 mb-4"></i>
+            <h2 class="text-3xl font-bold text-gray-100 mb-2">Proyek Tidak Ditemukan</h2>
+            <p class="text-gray-400 mb-6">Maaf, proyek yang Anda cari tidak dapat ditemukan.</p>
+            <a href="daftar-proyek.html" class="btn-primary px-6 py-3">Kembali ke Daftar Proyek</a>
+        </div>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>© <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Fungsi Notifikasi Global (Duplikat dari notifikasi.html atau utils.js) ---
+        function addNotification(type, message, projectId = null, projectName = null) {
+            let notifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
+            const newNotification = {
+                id: Date.now(), type: type, message: message, projectId: projectId,
+                projectName: projectName, timestamp: new Date().toISOString(), isRead: false
+            };
+            notifications.unshift(newNotification);
+            localStorage.setItem('userNotifications', JSON.stringify(notifications));
+            console.log("Notifikasi ditambahkan (dari detail-proyek):", newNotification);
+        }
+
+
+        // Data Proyek Detail (Sama seperti sebelumnya)
+        const semuaProyekDetail = [
+            { id: 1, namaProyek: 'EduTech AI Masa Depan', tagline: 'Revolusi Belajar AI', deskripsiLengkap: 'Deskripsi lengkap EduTech...', targetDana: 250000000, danaTerkumpul: 162500000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=EduTech+AI+Detail', videoPitchUrl: 'https://www.youtube.com/embed/9', kategori: 'Teknologi', pemilikProyek: { nama: 'Tim EduSpark', profil: 'Tim ahli pendidikan dan AI.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=ES', website: '#' }, sisaHari: 30, lokasi: 'Jakarta', dokumen: [{nama:'Proposal.pdf',url:'#'}], updates:[], skemaInvestasi:'Ekuitas 10%', risikoTantangan:'Pasar kompetitif.'},
+            { id: 2, namaProyek: 'Kopi Organik Desa Lestari', tagline: 'Kopi berkualitas dari petani', deskripsiLengkap: 'Deskripsi lengkap Kopi Lestari...', targetDana: 120000000, danaTerkumpul: 48000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=Kopi+Detail', videoPitchUrl: '', kategori: 'Pertanian', pemilikProyek: { nama: 'Komunitas Desa Lestari', profil: 'Petani kopi berpengalaman.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=KL', website: '#' }, sisaHari: 45, lokasi: 'Bandung', dokumen: [], updates:[], skemaInvestasi:'Bagi hasil 15%', risikoTantangan:'Cuaca.'},
+            { id: 3, namaProyek: 'Fashion Ramah Lingkungan "EcoThread"', tagline: 'Gaya Bertanggung Jawab', deskripsiLengkap: 'Deskripsi lengkap EcoThread...', targetDana: 300000000, danaTerkumpul: 225000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=EcoThread+Detail', videoPitchUrl: '', kategori: 'Fashion', pemilikProyek: { nama: 'GreenStyle Collective', profil: 'Desainer fashion berkelanjutan.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=GC', website: '#' }, sisaHari: 60, lokasi: 'Surabaya', dokumen: [], updates:[], skemaInvestasi:'Saham preferen', risikoTantangan:'Bahan baku.'},
+            { id: 4, namaProyek: 'Aplikasi Kesehatan Mental "MindWell"', tagline: 'Kesejahteraan Mental Anda', deskripsiLengkap: 'Deskripsi lengkap MindWell...', targetDana: 180000000, danaTerkumpul: 90000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=MindWell+Detail', videoPitchUrl: 'https://www.youtube.com/embed/VIDEO_ID_MINDWELL0', kategori: 'Kesehatan', pemilikProyek: { nama: 'Sehat Jiwa Foundation', profil: 'Ahli kesehatan mental.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=SJ', website: '#' }, sisaHari: 25, lokasi: 'Yogyakarta', dokumen: [], updates:[], skemaInvestasi:'Donasi dengan reward', risikoTantangan:'Stigma masyarakat.'},
+            { id: 5, namaProyek: 'Rumah Belajar Anak Pesisir "Cahaya Ilmu"', tagline: 'Pendidikan untuk Semua', deskripsiLengkap: 'Deskripsi lengkap Cahaya Ilmu...', targetDana: 80000000, danaTerkumpul: 72000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=Cahaya+Ilmu+Detail', videoPitchUrl: '', kategori: 'Pendidikan', pemilikProyek: { nama: 'Yayasan Cahaya Pesisir', profil: 'Pegiat pendidikan anak.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=CP', website: '#' }, sisaHari: 15, lokasi: 'Semarang', dokumen: [], updates:[], skemaInvestasi:'Donasi murni', risikoTantangan:'Keberlanjutan dana.'},
+            { id: 6, namaProyek: 'Energi Terbarukan Komunitas "Sinar Desa"', tagline: 'Menerangi Desa', deskripsiLengkap: 'Deskripsi lengkap Sinar Desa...', targetDana: 500000000, danaTerkumpul: 200000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=Sinar+Desa+Detail', videoPitchUrl: 'https://www.youtube.com/embed/VIDEO_ID_MINDWELL1', kategori: 'Sosial', pemilikProyek: { nama: 'Desa Mandiri Energi', profil: 'Penggerak energi terbarukan.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=DM', website: '#' }, sisaHari: 90, lokasi: 'Papua', dokumen: [], updates:[], skemaInvestasi:'Investasi dampak sosial', risikoTantangan:'Logistik.'},
+            { id: 7, namaProyek: 'Startup Agrikultur Cerdas "AgroSmart"', tagline: 'Pertanian Presisi', deskripsiLengkap: 'Deskripsi lengkap AgroSmart...', targetDana: 220000000, danaTerkumpul: 110000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=AgroSmart+Detail', videoPitchUrl: '', kategori: 'Teknologi', pemilikProyek: { nama: 'AgroTech Solutions', profil: 'Inovator teknologi pertanian.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=AS', website: '#' }, sisaHari: 50, lokasi: 'Malang', dokumen: [], updates:[], skemaInvestasi:'Ekuitas', risikoTantangan:'Adopsi petani.'},
+            { id: 8, namaProyek: 'Pengembangan Properti Hijau "EcoResidences Bali"', tagline: 'Hunian Berkelanjutan', deskripsiLengkap: 'Deskripsi lengkap EcoResidences...', targetDana: 1200000000, danaTerkumpul: 300000000, gambarUtama: 'https://placehold.co/800x450/173A5E/64FFDA?text=EcoBali+Detail', videoPitchUrl: 'https://www.youtube.com/embed/VIDEO_ID_MINDWELL2', kategori: 'Properti', pemilikProyek: { nama: 'EcoLiving Developments', profil: 'Pengembang properti hijau.', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=EL', website: '#' }, sisaHari: 120, lokasi: 'Bali', dokumen: [], updates:[], skemaInvestasi:'Pembelian unit', risikoTantangan:'Pasar properti.'}
+        ];
+
+        function formatRupiah(angka) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka); }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectDetailContainer = document.getElementById('projectDetailContainer');
+            const projectNotFoundDiv = document.getElementById('projectNotFound');
+            const successInvestmentPopup = document.getElementById('successInvestmentPopup');
+            const successSaveProjectPopup = document.getElementById('successSaveProjectPopup');
+            
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna";
+            const userRole = localStorage.getItem('userRole');
+            const navAuthLinksDesktop = document.getElementById('navAuthLinksDesktop');
+            const navUserSectionDesktop = document.getElementById('navUserSectionDesktop');
+            const navAuthLinksMobile = document.getElementById('navAuthLinksMobile');
+            const navUserSectionMobile = document.getElementById('navUserSectionMobile');
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor.html' : 'dashboard-startup.html';
+
+            if (isUserLoggedIn === 'true') {
+                if(navAuthLinksDesktop) navAuthLinksDesktop.style.display = 'none';
+                if(navUserSectionDesktop) {
+                    navUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="hover:text-gray-300 mr-4 text-sm">Dashboard Saya</a> <span class="text-gray-300 mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+                    navUserSectionDesktop.classList.remove('hidden');
+                    navUserSectionDesktop.classList.add('flex', 'items-center');
+                }
+                if(navAuthLinksMobile) navAuthLinksMobile.style.display = 'none';
+                if(navUserSectionMobile) {
+                    navUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-6 py-3 hover:bg-gray-700">Dashboard Saya</a> <span class="block px-6 py-3 text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonMobile" class="block mx-4 my-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white text-center rounded-md font-semibold">Logout</a>`;
+                    navUserSectionMobile.classList.remove('hidden');
+                }
+            } else {
+                if(navAuthLinksDesktop) navAuthLinksDesktop.style.display = 'flex';
+                if(navUserSectionDesktop) navUserSectionDesktop.classList.add('hidden');
+                if(navAuthLinksMobile) navAuthLinksMobile.style.display = 'block';
+                if(navUserSectionMobile) navUserSectionMobile.classList.add('hidden');
+            }
+            function handleLogout(e) {
+                e.preventDefault();
+                localStorage.removeItem('isUserLoggedIn');
+                localStorage.removeItem('loggedInUserName');
+                localStorage.removeItem('userRole');
+                window.location.href = 'index.html';
+            }
+            const logoutButtonDesktop = document.getElementById('logoutButtonDesktop');
+            if(logoutButtonDesktop) logoutButtonDesktop.addEventListener('click', handleLogout);
+            const logoutButtonMobile = document.getElementById('logoutButtonMobile');
+            if(logoutButtonMobile) logoutButtonMobile.addEventListener('click', handleLogout);
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+            const currentYearFooter = document.getElementById('currentYearFooter');
+            if(currentYearFooter) currentYearFooter.textContent = new Date().getFullYear();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = parseInt(urlParams.get('id'));
+            
+            let myProjectsFromStorage = JSON.parse(localStorage.getItem('myProjects')) || [];
+            let proyek = myProjectsFromStorage.find(p => p.id === projectId);
+            if (!proyek) {
+                proyek = semuaProyekDetail.find(p => p.id === projectId);
+            }
+
+            const investmentModal = document.getElementById('investmentModal');
+            const investButton = document.getElementById('investButton');
+            const closeInvestmentModalButton = document.getElementById('closeInvestmentModal');
+            const cancelInvestmentButton = document.getElementById('cancelInvestmentButton');
+            const investmentForm = document.getElementById('investmentForm');
+            const modalProjectName = document.getElementById('modalProjectName');
+            const investmentAmountInput = document.getElementById('investmentAmount');
+            const confirmTermsCheckbox = document.getElementById('confirmTerms');
+            const investmentAmountError = document.getElementById('investmentAmountError');
+            const confirmTermsError = document.getElementById('confirmTermsError');
+            const saveProjectButton = document.getElementById('saveProjectButton'); 
+
+            let wishlistedProjects = JSON.parse(localStorage.getItem('wishlistedProjects')) || [];
+
+            function isProjectWishlisted(id) { return wishlistedProjects.includes(id); }
+
+            function updateSaveButtonUI(currentProjectId) {
+                if (!saveProjectButton) return;
+                if (isProjectWishlisted(currentProjectId)) {
+                    saveProjectButton.classList.add('saved');
+                    saveProjectButton.innerHTML = `<i class="fas fa-bookmark mr-2"></i> <span>Tersimpan</span>`;
+                } else {
+                    saveProjectButton.classList.remove('saved');
+                    saveProjectButton.innerHTML = `<i class="far fa-bookmark mr-2"></i> <span>Simpan Proyek</span>`;
+                }
+            }
+
+            function toggleWishlist(currentProjectId, currentProjectName) {
+                if (isUserLoggedIn !== 'true' || userRole !== 'investor') {
+                    alert('Anda harus login sebagai investor untuk menyimpan proyek.');
+                    window.location.href = `auth.html#login?redirect=detail-proyek.html?id=${currentProjectId}`;
+                    return;
+                }
+                const index = wishlistedProjects.indexOf(currentProjectId);
+                let message = "";
+                if (index > -1) {
+                    wishlistedProjects.splice(index, 1); 
+                    message = `Proyek "${currentProjectName}" dihapus dari wishlist.`;
+                } else {
+                    wishlistedProjects.push(currentProjectId); 
+                    message = `Proyek "${currentProjectName}" berhasil disimpan ke wishlist!`;
+                }
+                localStorage.setItem('wishlistedProjects', JSON.stringify(wishlistedProjects));
+                updateSaveButtonUI(currentProjectId);
+                if(successSaveProjectPopup){
+                    successSaveProjectPopup.textContent = message;
+                    successSaveProjectPopup.classList.add('show');
+                    setTimeout(() => { successSaveProjectPopup.classList.remove('show'); }, 2500);
+                }
+            }
+
+            if (proyek) {
+                projectDetailContainer.classList.remove('opacity-0');
+                projectDetailContainer.style.opacity = '1';
+                projectNotFoundDiv.classList.add('hidden');
+                const projectName = proyek.namaProyek || proyek.projectName;
+                document.title = `${projectName} - DANAIN`;
+                document.getElementById('breadcrumbProjectName').textContent = projectName;
+                document.getElementById('projectTitle').textContent = projectName;
+                document.getElementById('projectCategory').textContent = proyek.kategori || proyek.projectCategory;
+                document.getElementById('projectTagline').textContent = proyek.tagline || proyek.projectTagline || 'Tagline proyek...';
+                
+                const projectImage = document.getElementById('projectImage');
+                const projectVideoDiv = document.getElementById('projectVideo');
+                const videoUrl = proyek.videoPitchUrl || proyek.projectVideoURL;
+                const imageUrl = proyek.gambarUtama || proyek.projectImageURL;
+
+                if (videoUrl && videoUrl.includes('embed')) {
+                    projectImage.classList.add('hidden');
+                    projectVideoDiv.classList.remove('hidden');
+                    projectVideoDiv.innerHTML = `<iframe src="${videoUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                } else if (imageUrl) {
+                    projectImage.src = imageUrl;
+                    projectImage.alt = `Gambar ${projectName}`;
+                    projectImage.classList.remove('hidden');
+                    projectVideoDiv.classList.add('hidden');
+                } else {
+                    projectImage.src = 'https://placehold.co/800x450/102A43/1E2D3D?text=Gambar+Tidak+Tersedia';
+                    projectImage.classList.remove('hidden');
+                    projectVideoDiv.classList.add('hidden');
+                }
+                
+                document.getElementById('projectDescription').textContent = proyek.deskripsiLengkap || proyek.projectDescription || 'Deskripsi tidak tersedia.';
+                document.getElementById('projectRisks').textContent = proyek.risikoTantangan || proyek.projectRisks || 'Informasi risiko dan tantangan belum tersedia.';
+
+                const updatesList = document.getElementById('projectUpdatesList');
+                updatesList.innerHTML = ''; 
+                const projectUpdates = proyek.updates || [];
+                if (projectUpdates.length > 0) {
+                    projectUpdates.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                    projectUpdates.forEach(update => {
+                        updatesList.innerHTML += `<div class="update-item-detail"><p class="text-xs text-gray-500 mb-1">${new Date(update.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p><h4 class="font-semibold text-gray-200 mb-1">${update.judul}</h4><p class="text-sm text-gray-300 whitespace-pre-line">${update.deskripsi}</p></div>`;
+                    });
+                } else {
+                    updatesList.innerHTML = '<p class="text-gray-400">Belum ada update untuk proyek ini.</p>';
+                }
+
+                const documentsList = document.getElementById('projectDocumentsList');
+                documentsList.innerHTML = '';
+                 const projectDocuments = proyek.dokumen || [];
+                 if (projectDocuments.length > 0) {
+                    projectDocuments.forEach(doc => {
+                        documentsList.innerHTML += `<li><a href="${doc.url}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline">${doc.nama}</a></li>`;
+                    });
+                } else {
+                    let hasDocsFromLocalStorage = false;
+                    if (proyek.proposalLink) {
+                        documentsList.innerHTML += `<li><a href="${proyek.proposalLink}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline">Proposal Proyek</a></li>`;
+                        hasDocsFromLocalStorage = true;
+                    }
+                    if (proyek.presentationLink) {
+                        documentsList.innerHTML += `<li><a href="${proyek.presentationLink}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline">Presentasi Proyek</a></li>`;
+                        hasDocsFromLocalStorage = true;
+                    }
+                    if (!hasDocsFromLocalStorage) {
+                        documentsList.innerHTML = '<li class="text-gray-400">Tidak ada dokumen pendukung yang tersedia.</li>';
+                    }
+                }
+
+                const danaTerkumpulVal = parseFloat(proyek.danaTerkumpul) || 0;
+                const targetDanaVal = parseFloat(proyek.targetDana) || parseFloat(proyek.fundingTarget) || 0;
+
+                document.getElementById('danaTerkumpul').textContent = formatRupiah(danaTerkumpulVal);
+                document.getElementById('targetDana').textContent = formatRupiah(targetDanaVal);
+                const persentase = targetDanaVal > 0 ? (danaTerkumpulVal / targetDanaVal) * 100 : 0;
+                document.getElementById('progressBar').style.width = `${Math.min(persentase, 100).toFixed(0)}%`;
+                document.getElementById('persentaseTerkumpul').textContent = `${persentase.toFixed(0)}% terkumpul`;
+                document.getElementById('sisaHari').textContent = `${proyek.sisaHari || proyek.campaignDuration || 0} hari lagi`;
+                document.getElementById('skemaInvestasi').textContent = proyek.skemaInvestasi || proyek.investmentScheme || 'Informasi skema investasi belum tersedia.';
+                
+                const pemilik = proyek.pemilikProyek || { nama: proyek.teamInfo ? 'Tim Proyek' : 'Pengelola Tidak Diketahui', profil: proyek.teamInfo || '', avatar: 'https://placehold.co/100x100/0A192F/64FFDA?text=P', website: '#'};
+                document.getElementById('pemilikAvatar').src = pemilik.avatar;
+                document.getElementById('pemilikAvatar').alt = `Avatar ${pemilik.nama}`;
+                document.getElementById('pemilikNama').textContent = pemilik.nama;
+                const pemilikWebsiteLink = document.getElementById('pemilikWebsite');
+                if (pemilik.website && pemilik.website !== '#') {
+                    pemilikWebsiteLink.href = pemilik.website;
+                    pemilikWebsiteLink.classList.remove('hidden');
+                } else {
+                    pemilikWebsiteLink.classList.add('hidden');
+                }
+                document.getElementById('pemilikProfil').textContent = pemilik.profil;
+
+                updateSaveButtonUI(proyek.id);
+                if (saveProjectButton) {
+                    saveProjectButton.addEventListener('click', function() {
+                        toggleWishlist(proyek.id, projectName);
+                    });
+                }
+
+                if (investButton) {
+                    investButton.addEventListener('click', function() {
+                         if (isUserLoggedIn === 'true') {
+                            if (userRole === 'investor') {
+                                if(modalProjectName) modalProjectName.textContent = projectName;
+                                if(investmentModal) investmentModal.classList.add('show');
+                            } else {
+                                alert('Hanya investor yang dapat melakukan investasi.');
+                            }
+                        } else {
+                            alert('Anda harus login terlebih dahulu untuk berinvestasi.');
+                            window.location.href = `auth.html#login?redirect=detail-proyek.html?id=${proyek.id}`;
+                        }
+                    });
+                }
+                const contactButton = document.getElementById('contactButton');
+                if(contactButton) {
+                    contactButton.addEventListener('click', function() {
+                        alert(`Untuk menghubungi pengelola proyek "${projectName}", silakan kirim email ke info@danain.com (Contoh).`);
+                    });
+                }
+
+            } else {
+                projectDetailContainer.classList.add('hidden');
+                projectDetailContainer.style.opacity = '0';
+                projectNotFoundDiv.classList.remove('hidden');
+                document.title = "Proyek Tidak Ditemukan - DANAIN";
+            }
+
+            if (closeInvestmentModalButton && investmentModal) {
+                closeInvestmentModalButton.addEventListener('click', () => investmentModal.classList.remove('show'));
+            }
+            if (cancelInvestmentButton && investmentModal) {
+                cancelInvestmentButton.addEventListener('click', () => investmentModal.classList.remove('show'));
+            }
+            if (investmentModal) {
+                investmentModal.addEventListener('click', function(event) { 
+                    if (event.target === investmentModal) {
+                        investmentModal.classList.remove('show');
+                    }
+                });
+            }
+
+            if (investmentForm && proyek) { 
+                investmentForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    let isValid = true;
+                    investmentAmountError.style.display = 'none';
+                    if (!investmentAmountInput.value || parseFloat(investmentAmountInput.value) < 100000) {
+                        investmentAmountError.textContent = "Jumlah investasi minimal Rp 100.000.";
+                        investmentAmountError.style.display = 'block';
+                        isValid = false;
+                    }
+                    confirmTermsError.style.display = 'none';
+                    if (!confirmTermsCheckbox.checked) {
+                        confirmTermsError.textContent = "Anda harus menyetujui syarat & ketentuan.";
+                        confirmTermsError.style.display = 'block';
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        const amount = parseFloat(investmentAmountInput.value);
+                        const currentProjectName = proyek.namaProyek || proyek.projectName;
+                        const investmentData = {
+                            projectId: proyek.id,
+                            projectName: currentProjectName,
+                            amountInvested: amount,
+                            investmentDate: new Date().toISOString().split('T')[0],
+                            statusProyekSaatInvestasi: proyek.status || 'Pendanaan Aktif'
+                        };
+
+                        let myInvestments = JSON.parse(localStorage.getItem('myInvestments')) || [];
+                        myInvestments.push(investmentData);
+                        localStorage.setItem('myInvestments', JSON.stringify(myInvestments));
+                        addNotification('new_investment', `Anda berhasil berinvestasi sebesar ${formatRupiah(amount)} pada proyek "${currentProjectName}".`, proyek.id, currentProjectName);
+                        addNotification('new_investment_startup', `Ada investasi baru sebesar ${formatRupiah(amount)} untuk proyek Anda "${currentProjectName}" dari ${loggedInUserName}.`, proyek.id, currentProjectName);
+
+
+                        if(investmentModal) investmentModal.classList.remove('show');
+                        investmentForm.reset(); 
+
+                        if(successInvestmentPopup) {
+                            successInvestmentPopup.textContent = `Investasi Anda sebesar ${formatRupiah(amount)} pada proyek "${currentProjectName}" berhasil dicatat!`;
+                            successInvestmentPopup.classList.add('show');
+                            setTimeout(() => {
+                                successInvestmentPopup.classList.remove('show');
+                            }, 3500);
+                        }
+                        
+                        let currentProjectData = myProjectsFromStorage.find(p => p.id === projectId);
+                        if (currentProjectData) {
+                            currentProjectData.danaTerkumpul = (parseFloat(currentProjectData.danaTerkumpul) || 0) + amount;
+                            const projectIndex = myProjectsFromStorage.findIndex(p => p.id === projectId);
+                            myProjectsFromStorage[projectIndex] = currentProjectData;
+                            localStorage.setItem('myProjects', JSON.stringify(myProjectsFromStorage)); 
+
+                            document.getElementById('danaTerkumpul').textContent = formatRupiah(currentProjectData.danaTerkumpul);
+                            const newPersentase = (currentProjectData.danaTerkumpul / (parseFloat(currentProjectData.targetDana) || parseFloat(currentProjectData.fundingTarget) || 1)) * 100;
+                            document.getElementById('progressBar').style.width = `${Math.min(newPersentase, 100).toFixed(0)}%`;
+                            document.getElementById('persentaseTerkumpul').textContent = `${newPersentase.toFixed(0)}% terkumpul`;
+                        } else {
+                             proyek.danaTerkumpul = (parseFloat(proyek.danaTerkumpul) || 0) + amount;
+                             document.getElementById('danaTerkumpul').textContent = formatRupiah(proyek.danaTerkumpul);
+                             const newPersentase = (proyek.danaTerkumpul / (parseFloat(proyek.targetDana) || parseFloat(proyek.fundingTarget) || 1)) * 100;
+                             document.getElementById('progressBar').style.width = `${Math.min(newPersentase, 100).toFixed(0)}%`;
+                             document.getElementById('persentaseTerkumpul').textContent = `${newPersentase.toFixed(0)}% terkumpul`;
+                        }
+                    }
+                });
+            }
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.dataset.tab;
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    tabContents.forEach(content => {
+                        content.classList.toggle('active', content.id === `${targetTab}Content`);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

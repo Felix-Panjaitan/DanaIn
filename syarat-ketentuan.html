@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syarat & Ketentuan - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        .top-navbar {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+            height: 4.5rem; 
+        }
+        .top-navbar-link { color: #A8B2D1; transition: color 0.2s ease; }
+        .top-navbar-link:hover, .top-navbar-link.active { color: #64FFDA; }
+        .top-navbar-link.active { font-weight: 600; }
+
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary { 
+            background-color: #1E2D3D;
+            color: #A8B2D1;
+            border: 1px solid #3E4C5B;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #3E4C5B;
+            border-color: #64FFDA;
+            color: #64FFDA;
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .content-container { 
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 24px 32px; 
+            margin-top: 32px;
+            margin-bottom: 32px;
+        }
+        .content-container h2 {
+            font-size: 1.5rem; 
+            font-weight: 700;
+            color: #CCD6F6;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1E2D3D;
+        }
+        .content-container h3 {
+            font-size: 1.25rem; 
+            font-weight: 600;
+            color: #E0E6F1;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .content-container p, .content-container ul li {
+            font-size: 0.95rem; 
+            line-height: 1.7;
+            color: #A8B2D1;
+            margin-bottom: 1rem;
+        }
+        .content-container ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .content-container a {
+            color: #64FFDA;
+            text-decoration: underline;
+        }
+        .content-container a:hover {
+            color: #52D3C8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna"; 
+            const userRole = localStorage.getItem('userRole') || "startup"; 
+
+            const topNavAuthLinksDesktop = document.getElementById('topNavAuthLinksDesktop');
+            const topNavUserSectionDesktop = document.getElementById('topNavUserSectionDesktop');
+            const topNavAuthLinksMobile = document.getElementById('topNavAuthLinksMobile');
+            const topNavUserSectionMobile = document.getElementById('topNavUserSectionMobile');
+            const dashboardLink = document.getElementById('dashboardLink');
+            const mobileDashboardLink = document.getElementById('mobileDashboardLink');
+            
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor.html' : 'dashboard-startup.html';
+            if(dashboardLink) dashboardLink.href = dashboardUrl;
+            if(mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+            if (isUserLoggedIn === 'true') {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'none';
+                if(topNavUserSectionDesktop) {
+                    topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+                    topNavUserSectionDesktop.classList.remove('hidden');
+                    topNavUserSectionDesktop.classList.add('flex', 'items-center');
+                    setupLogoutButton('logoutButtonTopDesktop');
+                }
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'none';
+                if(topNavUserSectionMobile) {
+                    topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+                    topNavUserSectionMobile.classList.remove('hidden');
+                    setupLogoutButton('logoutButtonTopMobile');
+                }
+            } else {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'flex';
+                if(topNavUserSectionDesktop) topNavUserSectionDesktop.classList.add('hidden');
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'block';
+                if(topNavUserSectionMobile) topNavUserSectionMobile.classList.add('hidden');
+            }
+            
+            function setupLogoutButton(buttonId) {
+                const logoutButton = document.getElementById(buttonId);
+                if (logoutButton) {
+                    logoutButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isUserLoggedIn');
+                        localStorage.removeItem('loggedInUserName');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('demoUserEmail');
+                        localStorage.removeItem('demoUserPassword');
+                        localStorage.removeItem('demoUserUsername');
+                        window.location.href = 'index.html';
+                    });
+                }
+            }
+
+            const topMobileMenuButton = document.getElementById('topMobileMenuButton');
+            const topMobileMenu = document.getElementById('topMobileMenu');
+            if(topMobileMenuButton && topMobileMenu) {
+                topMobileMenuButton.addEventListener('click', function() { topMobileMenu.classList.toggle('hidden'); });
+                 document.addEventListener('click', function(event) { 
+                    if (!topMobileMenuButton.contains(event.target) && !topMobileMenu.contains(event.target)) {
+                        topMobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            const currentYearFooter = document.getElementById('currentYearFooter');
+            if(currentYearFooter) currentYearFooter.textContent = new Date().getFullYear();
+        });
+    </script>
+
+    <header class="top-navbar sticky top-0 z-50">
+        <nav class="container mx-auto px-6 h-full flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="daftar-proyek.html" class="top-navbar-link">Telusuri Proyek</a>
+                <a href="#" id="dashboardLink" class="top-navbar-link">Dashboard Saya</a>
+                <a href="tentang-kami.html" class="top-navbar-link">Tentang Kami</a>
+                <a href="index.html#faq" class="top-navbar-link">FAQ</a>
+                <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+                <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="topMobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="topMobileMenu" class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg">
+            <a href="daftar-proyek.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Telusuri Proyek</a>
+            <a href="#" id="mobileDashboardLink" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Dashboard Saya</a>
+            <a href="tentang-kami.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Tentang Kami</a>
+            <a href="index.html#faq" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">FAQ</a>
+            <div id="topNavUserSectionMobile" class="hidden border-t border-gray-700 mt-2 pt-2"></div>
+            <div id="topNavAuthLinksMobile" class="border-t border-gray-700 mt-2 pt-2">
+                <a href="auth.html#login" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Masuk</a>
+                <a href="auth.html#signup" class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-100">Syarat & Ketentuan</h1>
+            <p class="text-lg text-gray-400 mt-2">Terakhir diperbarui: 3 Juni 2025</p>
+        </div>
+
+        <article class="content-container max-w-4xl mx-auto">
+            <h2>1. Penerimaan Ketentuan</h2>
+            <p>Dengan mengakses atau menggunakan platform DANAIN ("Platform"), Anda setuju untuk terikat oleh Syarat dan Ketentuan ("Ketentuan") ini dan Kebijakan Privasi kami. Jika Anda tidak setuju dengan bagian mana pun dari ketentuan ini, Anda tidak diizinkan untuk menggunakan Platform.</p>
+
+            <h2>2. Definisi</h2>
+            <p>
+                <ul>
+                    <li><strong>Platform:</strong> Merujuk pada website dan layanan yang disediakan oleh DANAIN.</li>
+                    <li><strong>Pengguna:</strong> Setiap individu atau entitas yang mengakses atau menggunakan Platform, termasuk Pengelola Proyek dan Investor.</li>
+                    <li><strong>Pengelola Proyek:</strong> Pengguna yang mengajukan proyek untuk mendapatkan pendanaan melalui Platform.</li>
+                    <li><strong>Investor:</strong> Pengguna yang memberikan pendanaan kepada proyek melalui Platform.</li>
+                    <li><strong>Proyek:</strong> Ide, usaha, atau inisiatif yang diajukan oleh Pengelola Proyek untuk mendapatkan pendanaan.</li>
+                </ul>
+            </p>
+
+            <h2>3. Penggunaan Platform</h2>
+            <h3>3.1. Kelayakan Akun</h3>
+            <p>Anda harus berusia minimal 18 tahun atau usia dewasa menurut hukum di yurisdiksi Anda untuk membuat akun dan menggunakan Platform. Dengan membuat akun, Anda menyatakan dan menjamin bahwa Anda memenuhi persyaratan ini.</p>
+            <h3>3.2. Akurasi Informasi</h3>
+            <p>Anda setuju untuk memberikan informasi yang akurat, terkini, dan lengkap selama proses pendaftaran dan memperbarui informasi tersebut agar tetap akurat, terkini, dan lengkap.</p>
+            <h3>3.3. Keamanan Akun</h3>
+            <p>Anda bertanggung jawab untuk menjaga kerahasiaan kata sandi akun Anda dan untuk semua aktivitas yang terjadi di bawah akun Anda. Anda setuju untuk segera memberitahu DANAIN tentang penggunaan akun Anda yang tidak sah.</p>
+
+            <h2>4. Peran dan Tanggung Jawab</h2>
+            <h3>4.1. Pengelola Proyek</h3>
+            <p>Pengelola Proyek bertanggung jawab penuh atas keakuratan dan kelengkapan informasi yang diberikan mengenai proyek mereka. DANAIN tidak menjamin keberhasilan pendanaan atau kesuksesan proyek.</p>
+            <h3>4.2. Investor</h3>
+            <p>Investor memahami bahwa investasi dalam proyek rintisan memiliki risiko tinggi, termasuk risiko kehilangan seluruh jumlah investasi. Investor bertanggung jawab untuk melakukan uji tuntas (due diligence) mereka sendiri sebelum melakukan investasi.</p>
+
+            <h2>5. Transaksi Pendanaan</h2>
+            <p>Semua transaksi pendanaan dilakukan secara langsung antara Pengelola Proyek dan Investor. DANAIN dapat memfasilitasi proses ini tetapi bukan merupakan pihak dalam perjanjian investasi apa pun kecuali dinyatakan lain secara eksplisit.</p>
+            
+            <h2>6. Biaya Layanan</h2>
+            <p>DANAIN dapat mengenakan biaya untuk layanan tertentu. Setiap biaya yang berlaku akan diinformasikan kepada Anda sebelum Anda menggunakan layanan berbayar tersebut.</p>
+
+            <h2>7. Batasan Tanggung Jawab</h2>
+            <p>Sejauh diizinkan oleh hukum yang berlaku, DANAIN tidak akan bertanggung jawab atas kerugian atau kerusakan tidak langsung, insidental, khusus, konsekuensial, atau punitif, atau kerugian keuntungan atau pendapatan, baik yang terjadi secara langsung maupun tidak langsung, atau kehilangan data, penggunaan, goodwill, atau kerugian tidak berwujud lainnya, yang diakibatkan oleh (i) akses Anda ke atau penggunaan atau ketidakmampuan untuk mengakses atau menggunakan Platform; (ii) setiap perilaku atau konten pihak ketiga di Platform; atau (iii) akses, penggunaan, atau perubahan yang tidak sah pada transmisi atau konten Anda.</p>
+
+            <h2>8. Perubahan Ketentuan</h2>
+            <p>DANAIN berhak untuk memodifikasi atau mengganti Ketentuan ini kapan saja atas kebijakan kami sendiri. Jika revisi bersifat material, kami akan berusaha memberikan pemberitahuan setidaknya 30 hari sebelum ketentuan baru berlaku. Apa yang merupakan perubahan material akan ditentukan atas kebijakan kami sendiri.</p>
+
+            <h2>9. Hukum yang Mengatur</h2>
+            <p>Ketentuan ini akan diatur dan ditafsirkan sesuai dengan hukum Negara Republik Indonesia, tanpa memperhatikan pertentangan ketentuan hukumnya.</p>
+
+            <h2>10. Kontak Kami</h2>
+            <p>Jika Anda memiliki pertanyaan tentang Ketentuan ini, silakan hubungi kami di [alamat email kontak placeholder, misal: legal@danain.com].</p>
+        </article>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>© <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+</body>
+</html>

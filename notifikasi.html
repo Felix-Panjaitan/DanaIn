@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifikasi - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0a192f;
+        color: #e0e6f1;
+      }
+      .top-navbar {
+        background-color: #0a192f;
+        border-bottom: 1px solid #1e2d3d;
+        height: 4.5rem;
+      }
+      .top-navbar-link {
+        color: #a8b2d1;
+        transition: color 0.2s ease;
+      }
+      .top-navbar-link:hover,
+      .top-navbar-link.active {
+        color: #64ffda;
+      }
+      .top-navbar-link.active {
+        font-weight: 600;
+      }
+
+      .btn-primary {
+        background-color: #64ffda;
+        color: #0a192f;
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .btn-primary:hover {
+        background-color: #52d3c8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+      }
+      .btn-secondary {
+        background-color: #1e2d3d;
+        color: #a8b2d1;
+        border: 1px solid #3e4c5b;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-color 0.3s ease;
+      }
+      .btn-secondary:hover {
+        background-color: #3e4c5b;
+        border-color: #64ffda;
+        color: #64ffda;
+      }
+      .footer-bg {
+        background-color: #081424;
+        border-top: 1px solid #1e2d3d;
+      }
+      .notification-item {
+        background-color: #102a43;
+        border: 1px solid #1e2d3d;
+        border-left-width: 4px;
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+      }
+      .notification-item.unread {
+        border-left-color: #64ffda;
+        background-color: #173a5e;
+      }
+      .notification-item:hover {
+        background-color: #173a5e;
+      }
+      .notification-icon {
+        margin-right: 12px;
+        font-size: 1.25rem;
+      }
+      .icon-project-approved {
+        color: #4ade80;
+      }
+      .icon-project-rejected {
+        color: #f87171;
+      }
+      .icon-new-update {
+        color: #60a5fa;
+      }
+      .icon-new-investment {
+        color: #fbbf24;
+      }
+      .icon-general {
+        color: #a8b2d1;
+      }
+
+      .btn-mark-read,
+      .btn-delete-notif {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-left: 8px;
+      }
+      .btn-mark-read {
+        background-color: rgba(100, 255, 218, 0.1);
+        color: #64ffda;
+        border: 1px solid #64ffda;
+      }
+      .btn-mark-read:hover {
+        background-color: rgba(100, 255, 218, 0.2);
+      }
+      .btn-mark-read.read {
+        background-color: transparent;
+        color: #a8b2d1;
+        border: 1px solid #3e4c5b;
+        cursor: default;
+      }
+      .btn-delete-notif {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid #ef4444;
+      }
+      .btn-delete-notif:hover {
+        background-color: rgba(239, 68, 68, 0.2);
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <header class="top-navbar sticky top-0 z-50">
+      <nav
+        class="container mx-auto px-6 h-full flex justify-between items-center"
+      >
+        <a
+          href="index.html"
+          class="text-3xl font-extrabold"
+          style="color: #64ffda"
+          >DANAIN</a
+        >
+        <div class="hidden md:flex space-x-6 items-center">
+          <a href="daftar-proyek.html" class="top-navbar-link"
+            >Telusuri Proyek</a
+          >
+          <a href="#" id="dashboardLink" class="top-navbar-link"
+            >Dashboard Saya</a
+          >
+          <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+          <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+            <a
+              href="auth.html#login"
+              class="btn-secondary px-4 py-2 rounded-md text-sm"
+              >Masuk</a
+            >
+            <a
+              href="auth.html#signup"
+              class="btn-primary px-4 py-2 rounded-md text-sm font-semibold"
+              >Daftar</a
+            >
+          </div>
+        </div>
+        <div class="md:hidden">
+          <button
+            id="topMobileMenuButton"
+            class="text-gray-300 hover:text-white focus:outline-none"
+          >
+            <i class="fas fa-ellipsis-v text-xl"></i>
+          </button>
+        </div>
+      </nav>
+      <div
+        id="topMobileMenu"
+        class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg"
+      >
+        <a
+          href="daftar-proyek.html"
+          class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+          >Telusuri Proyek</a
+        >
+        <a
+          href="#"
+          id="mobileDashboardLink"
+          class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+          >Dashboard Saya</a
+        >
+        <div
+          id="topNavUserSectionMobile"
+          class="hidden border-t border-gray-700 mt-2 pt-2"
+        ></div>
+        <div
+          id="topNavAuthLinksMobile"
+          class="border-t border-gray-700 mt-2 pt-2"
+        >
+          <a
+            href="auth.html#login"
+            class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+            >Masuk</a
+          >
+          <a
+            href="auth.html#signup"
+            class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold"
+            >Daftar</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+      <div
+        id="notificationsContent"
+        class="opacity-0 transition-opacity duration-500 ease-in-out"
+      >
+        <div class="mb-8 md:mb-12 flex justify-between items-center">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-100">
+              Notifikasi Anda
+            </h1>
+            <p class="text-lg text-gray-400 mt-2">
+              Semua pemberitahuan penting Anda ada di sini.
+            </p>
+          </div>
+          <button
+            id="markAllReadButton"
+            class="btn-secondary px-4 py-2 text-sm rounded-md"
+          >
+            Tandai Semua Dibaca
+          </button>
+        </div>
+
+        <div id="notificationsListContainer" class="space-y-4">
+          <p id="loadingNotifications" class="text-center text-gray-400 py-10">
+            Memuat notifikasi...
+          </p>
+        </div>
+        <div id="noNotificationsMessage" class="hidden text-center py-10">
+          <i class="fas fa-bell-slash text-4xl text-gray-500 mb-4"></i>
+          <p class="text-xl text-gray-400">
+            Tidak ada notifikasi untuk Anda saat ini.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+      <div class="container mx-auto px-6 text-center">
+        <p>
+          © <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta
+          Dilindungi.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      function addNotification(
+        type,
+        message,
+        projectId = null,
+        projectName = null
+      ) {
+        let notifications =
+          JSON.parse(localStorage.getItem("userNotifications")) || [];
+        const newNotification = {
+          id: Date.now(),
+          type: type, // 'project_approved', 'project_rejected', 'new_update', 'new_investment', 'general'
+          message: message,
+          projectId: projectId,
+          projectName: projectName,
+          timestamp: new Date().toISOString(),
+          isRead: false,
+        };
+        notifications.unshift(newNotification);
+        localStorage.setItem(
+          "userNotifications",
+          JSON.stringify(notifications)
+        );
+        console.log("Notifikasi ditambahkan:", newNotification);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const notificationsContent = document.getElementById(
+          "notificationsContent"
+        );
+        const notificationsListContainer = document.getElementById(
+          "notificationsListContainer"
+        );
+        const loadingNotifications = document.getElementById(
+          "loadingNotifications"
+        );
+        const noNotificationsMessage = document.getElementById(
+          "noNotificationsMessage"
+        );
+        const markAllReadButton = document.getElementById("markAllReadButton");
+
+        const isUserLoggedIn = localStorage.getItem("isUserLoggedIn");
+        const loggedInUserName =
+          localStorage.getItem("loggedInUserName") || "Pengguna";
+        const userRole = localStorage.getItem("userRole") || "startup";
+
+        const topNavAuthLinksDesktop = document.getElementById(
+          "topNavAuthLinksDesktop"
+        );
+        const topNavUserSectionDesktop = document.getElementById(
+          "topNavUserSectionDesktop"
+        );
+        const topNavAuthLinksMobile = document.getElementById(
+          "topNavAuthLinksMobile"
+        );
+        const topNavUserSectionMobile = document.getElementById(
+          "topNavUserSectionMobile"
+        );
+        const dashboardLink = document.getElementById("dashboardLink");
+        const mobileDashboardLink = document.getElementById(
+          "mobileDashboardLink"
+        );
+
+        const dashboardUrl =
+          userRole === "investor"
+            ? "dashboard-investor.html"
+            : "dashboard-startup.html";
+        if (dashboardLink) dashboardLink.href = dashboardUrl;
+        if (mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+        if (isUserLoggedIn !== "true") {
+          window.location.href = `auth.html#login?redirect=${encodeURIComponent(
+            window.location.pathname + window.location.search
+          )}`;
+          return;
+        }
+
+        notificationsContent.classList.remove("opacity-0");
+        notificationsContent.style.opacity = "1";
+
+        if (isUserLoggedIn === "true") {
+          if (topNavAuthLinksDesktop)
+            topNavAuthLinksDesktop.style.display = "none";
+          if (topNavUserSectionDesktop) {
+            topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+            topNavUserSectionDesktop.classList.remove("hidden");
+            topNavUserSectionDesktop.classList.add("flex", "items-center");
+            setupLogoutButton("logoutButtonTopDesktop");
+          }
+          if (topNavAuthLinksMobile)
+            topNavAuthLinksMobile.style.display = "none";
+          if (topNavUserSectionMobile) {
+            topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+            topNavUserSectionMobile.classList.remove("hidden");
+            setupLogoutButton("logoutButtonTopMobile");
+          }
+        }
+
+        function setupLogoutButton(buttonId) {
+          const logoutButton = document.getElementById(buttonId);
+          if (logoutButton) {
+            logoutButton.addEventListener("click", function (e) {
+              e.preventDefault();
+              [
+                "isUserLoggedIn",
+                "loggedInUserName",
+                "userRole",
+                "demoUserEmail",
+                "demoUserPassword",
+                "demoUserUsername",
+                "notificationPreferences",
+                "myProjects",
+                "myInvestments",
+                "wishlistedProjects",
+                "userNotifications",
+              ].forEach((item) => localStorage.removeItem(item));
+              window.location.href = "index.html";
+            });
+          }
+        }
+
+        const topMobileMenuButton = document.getElementById(
+          "topMobileMenuButton"
+        );
+        const topMobileMenu = document.getElementById("topMobileMenu");
+        if (topMobileMenuButton && topMobileMenu) {
+          topMobileMenuButton.addEventListener("click", function () {
+            topMobileMenu.classList.toggle("hidden");
+          });
+          document.addEventListener("click", function (event) {
+            if (
+              !topMobileMenuButton.contains(event.target) &&
+              !topMobileMenu.contains(event.target)
+            ) {
+              topMobileMenu.classList.add("hidden");
+            }
+          });
+        }
+
+        const currentYearFooter = document.getElementById("currentYearFooter");
+        if (currentYearFooter)
+          currentYearFooter.textContent = new Date().getFullYear();
+
+        function getNotificationIcon(type) {
+          switch (type) {
+            case "project_approved":
+              return '<i class="fas fa-check-circle notification-icon icon-project-approved"></i>';
+            case "project_rejected":
+              return '<i class="fas fa-times-circle notification-icon icon-project-rejected"></i>';
+            case "new_update":
+              return '<i class="fas fa-bullhorn notification-icon icon-new-update"></i>';
+            case "new_investment":
+              return '<i class="fas fa-hand-holding-usd notification-icon icon-new-investment"></i>';
+            default:
+              return '<i class="fas fa-info-circle notification-icon icon-general"></i>';
+          }
+        }
+
+        function renderNotifications() {
+          const notifications =
+            JSON.parse(localStorage.getItem("userNotifications")) || [];
+          notificationsListContainer.innerHTML = "";
+
+          if (loadingNotifications) loadingNotifications.style.display = "none";
+
+          if (notifications.length > 0) {
+            noNotificationsMessage.classList.add("hidden");
+            notifications.forEach((notif) => {
+              const notifElement = document.createElement("div");
+              notifElement.className = `notification-item ${
+                !notif.isRead ? "unread" : ""
+              }`;
+              notifElement.dataset.notifId = notif.id;
+
+              let messageHtml = `<div class="flex items-start">
+                                            ${getNotificationIcon(notif.type)}
+                                            <div>
+                                                <p class="text-gray-200">${
+                                                  notif.message
+                                                }</p>
+                                                <p class="text-xs text-gray-500 mt-1">
+                                                    ${new Date(
+                                                      notif.timestamp
+                                                    ).toLocaleDateString(
+                                                      "id-ID",
+                                                      {
+                                                        year: "numeric",
+                                                        month: "short",
+                                                        day: "numeric",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                      }
+                                                    )}
+                                                    ${
+                                                      notif.projectName
+                                                        ? ` - Terkait Proyek: <a href="detail-proyek.html?id=${notif.projectId}" class="text-blue-400 hover:underline">${notif.projectName}</a>`
+                                                        : ""
+                                                    }
+                                                </p>
+                                            </div>
+                                           </div>`;
+
+              const actionsHtml = `
+                            <div class="mt-2 text-right">
+                                ${
+                                  !notif.isRead
+                                    ? `<button class="btn-mark-read" data-action="mark_read">Tandai Dibaca</button>`
+                                    : `<span class="text-xs text-gray-500 italic">Sudah dibaca</span>`
+                                }
+                                <button class="btn-delete-notif" data-action="delete"><i class="fas fa-trash-alt"></i></button>
+                            </div>`;
+
+              notifElement.innerHTML = messageHtml + actionsHtml;
+              notificationsListContainer.appendChild(notifElement);
+            });
+          } else {
+            noNotificationsMessage.classList.remove("hidden");
+          }
+          updateNotificationBadge();
+        }
+
+        notificationsListContainer.addEventListener("click", function (event) {
+          const targetButton = event.target.closest("button");
+          if (!targetButton) return;
+
+          const action = targetButton.dataset.action;
+          const notifElement = targetButton.closest(".notification-item");
+          const notifId = parseInt(notifElement.dataset.notifId);
+
+          let notifications =
+            JSON.parse(localStorage.getItem("userNotifications")) || [];
+          const notifIndex = notifications.findIndex((n) => n.id === notifId);
+
+          if (
+            action === "mark_read" &&
+            notifIndex > -1 &&
+            !notifications[notifIndex].isRead
+          ) {
+            notifications[notifIndex].isRead = true;
+            localStorage.setItem(
+              "userNotifications",
+              JSON.stringify(notifications)
+            );
+            renderNotifications();
+          } else if (action === "delete" && notifIndex > -1) {
+            notifications.splice(notifIndex, 1);
+            localStorage.setItem(
+              "userNotifications",
+              JSON.stringify(notifications)
+            );
+            renderNotifications();
+          }
+        });
+
+        if (markAllReadButton) {
+          markAllReadButton.addEventListener("click", function () {
+            let notifications =
+              JSON.parse(localStorage.getItem("userNotifications")) || [];
+            notifications.forEach((n) => (n.isRead = true));
+            localStorage.setItem(
+              "userNotifications",
+              JSON.stringify(notifications)
+            );
+            renderNotifications();
+          });
+        }
+
+        function updateNotificationBadge() {
+          const notifications =
+            JSON.parse(localStorage.getItem("userNotifications")) || [];
+          const unreadCount = notifications.filter((n) => !n.isRead).length;
+          console.log("Notifikasi belum dibaca:", unreadCount);
+          // const badgeElement = document.querySelector('.notification-badge-selector');
+          // if (badgeElement) {
+          //    badgeElement.textContent = unreadCount > 0 ? unreadCount : '';
+          //    badgeElement.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+          // }
+        }
+
+        renderNotifications();
+      });
+    </script>
+  </body>
+</html>

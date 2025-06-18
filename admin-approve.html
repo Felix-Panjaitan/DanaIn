@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Persetujuan Proyek</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0a192f;
+        color: #e0e6f1;
+        padding: 20px;
+      }
+      .container {
+        background-color: #102a43;
+        border: 1px solid #1e2d3d;
+        border-radius: 8px;
+        padding: 24px;
+        max-width: 900px;
+        margin: 40px auto;
+      }
+      h1 {
+        color: #64ffda;
+        border-bottom: 1px solid #1e2d3d;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .project-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      .project-table th,
+      .project-table td {
+        border: 1px solid #1e2d3d;
+        padding: 10px 12px;
+        text-align: left;
+        font-size: 0.875rem;
+      }
+      .project-table th {
+        background-color: #0f2138;
+        color: #a8b2d1;
+        font-weight: 600;
+      }
+      .project-table td {
+        background-color: #102a43;
+      }
+      .project-table tr:nth-child(even) td {
+        background-color: #0f2138;
+      }
+      .btn-approve {
+        background-color: #4ade80;
+        color: #0a192f;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: background-color 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-approve:hover {
+        background-color: #36b37e;
+      }
+      .btn-reject {
+        background-color: #ef4444;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: background-color 0.2s ease;
+        border: none;
+        cursor: pointer;
+        margin-left: 8px;
+      }
+      .btn-reject:hover {
+        background-color: #dc2626;
+      }
+      .status-review {
+        background-color: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        padding: 3px 8px;
+        border-radius: 9999px;
+        font-size: 0.7rem;
+        font-weight: 500;
+      }
+      .success-message {
+        background-color: rgba(74, 222, 128, 0.1);
+        border: 1px solid #4ade80;
+        color: #4ade80;
+        padding: 10px;
+        border-radius: 6px;
+        margin-top: 20px;
+        text-align: center;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>
+        <i class="fas fa-user-shield mr-2"></i>Panel Admin - Persetujuan Proyek
+      </h1>
+
+      <div id="pendingProjectsContainer">
+        <h2 class="text-xl font-semibold text-gray-100 mb-4">
+          Proyek Menunggu Persetujuan:
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="project-table">
+            <thead>
+              <tr>
+                <th>ID Proyek</th>
+                <th>Nama Proyek</th>
+                <th>Pengelola</th>
+                <th>Target Dana</th>
+                <th>Status Saat Ini</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="pendingProjectsTableBody"></tbody>
+          </table>
+        </div>
+        <p
+          id="noPendingProjectsMessage"
+          class="text-center text-gray-400 mt-6 hidden"
+        >
+          Tidak ada proyek yang menunggu persetujuan saat ini.
+        </p>
+      </div>
+
+      <div id="successMessage" class="success-message">
+        Status proyek berhasil diperbarui!
+      </div>
+
+      <div class="mt-8 text-center">
+        <a href="index.html" class="text-blue-400 hover:underline"
+          >&larr; Kembali ke Beranda (Demo)</a
+        >
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const pendingProjectsTableBody = document.getElementById(
+          "pendingProjectsTableBody"
+        );
+        const noPendingProjectsMessage = document.getElementById(
+          "noPendingProjectsMessage"
+        );
+        const successMessageDiv = document.getElementById("successMessage");
+
+        function formatRupiah(angka) {
+          return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(angka);
+        }
+
+        function loadPendingProjects() {
+          const myProjects =
+            JSON.parse(localStorage.getItem("myProjects")) || [];
+          const pendingProjects = myProjects.filter(
+            (p) => p.status && p.status.toLowerCase() === "menunggu persetujuan"
+          );
+
+          pendingProjectsTableBody.innerHTML = "";
+
+          if (pendingProjects.length > 0) {
+            noPendingProjectsMessage.classList.add("hidden");
+            pendingProjects.forEach((proyek) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                            <td>${proyek.id}</td>
+                            <td>${proyek.projectName || "N/A"}</td>
+                            <td>${proyek.pemilikProyek || "N/A"}</td>
+                            <td class="text-right">${formatRupiah(
+                              proyek.fundingTarget || 0
+                            )}</td>
+                            <td><span class="status-review">${
+                              proyek.status
+                            }</span></td>
+                            <td>
+                                <button class="btn-approve" data-project-id="${
+                                  proyek.id
+                                }">Setujui</button>
+                                <button class="btn-reject" data-project-id="${
+                                  proyek.id
+                                }">Tolak</button> 
+                            </td>
+                        `;
+              pendingProjectsTableBody.appendChild(row);
+            });
+          } else {
+            noPendingProjectsMessage.classList.remove("hidden");
+          }
+        }
+
+        function updateProjectStatus(projectId, newStatus) {
+          let myProjects = JSON.parse(localStorage.getItem("myProjects")) || [];
+          const projectIndex = myProjects.findIndex((p) => p.id === projectId);
+
+          if (projectIndex > -1) {
+            myProjects[projectIndex].status = newStatus;
+            localStorage.setItem("myProjects", JSON.stringify(myProjects));
+
+            successMessageDiv.textContent = `Status proyek ID ${projectId} berhasil diubah menjadi "${newStatus}"!`;
+            successMessageDiv.style.display = "block";
+            setTimeout(() => {
+              successMessageDiv.style.display = "none";
+            }, 3000);
+
+            loadPendingProjects();
+          } else {
+            alert("Error: Proyek tidak ditemukan di localStorage.");
+          }
+        }
+
+        pendingProjectsTableBody.addEventListener("click", function (event) {
+          const target = event.target;
+          const projectId = parseInt(target.dataset.projectId);
+
+          if (target.classList.contains("btn-approve")) {
+            if (
+              confirm(
+                `Apakah Anda yakin ingin menyetujui proyek ID ${projectId}?`
+              )
+            ) {
+              updateProjectStatus(projectId, "Pendanaan Aktif");
+            }
+          } else if (target.classList.contains("btn-reject")) {
+            if (
+              confirm(`Apakah Anda yakin ingin menolak proyek ID ${projectId}?`)
+            ) {
+              updateProjectStatus(projectId, "Ditolak");
+            }
+          }
+        });
+
+        loadPendingProjects();
+      });
+    </script>
+  </body>
+</html>

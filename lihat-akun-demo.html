@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lihat Akun Demo - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+            padding: 20px;
+        }
+        .container {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        h1 {
+            color: #64FFDA;
+            border-bottom: 1px solid #1E2D3D;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .data-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #0F2138;
+            border-radius: 6px;
+            border-left: 3px solid #64FFDA;
+        }
+        .data-label {
+            font-weight: 600;
+            color: #A8B2D1;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .data-value {
+            color: #E0E6F1;
+            word-break: break-all; 
+        }
+        .warning {
+            background-color: rgba(251, 191, 36, 0.1); 
+            border: 1px solid #FBBF24;
+            color: #FBBF24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .btn-clear {
+            background-color: #EF4444; 
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-clear:hover {
+            background-color: #DC2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-2xl font-bold text-center">Data Akun Demo Tersimpan (localStorage)</h1>
+        
+        <div id="accountDataContainer">
+            <p class="text-center text-gray-400">Memuat data...</p>
+        </div>
+
+        <div class="warning">
+            <p><strong>PERINGATAN:</strong> Halaman ini hanya untuk tujuan pengembangan dan debugging prototipe. <strong>Jangan pernah</strong> menyimpan atau menampilkan password pengguna dalam bentuk teks biasa di aplikasi nyata. Password harus selalu di-hash.</p>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="clearLocalStorageButton" class="btn-clear">Hapus Semua Data Akun Demo dari localStorage</button>
+        </div>
+         <div class="mt-4 text-center">
+            <a href="index.html" class="text-blue-400 hover:underline">&larr; Kembali ke Beranda</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accountDataContainer = document.getElementById('accountDataContainer');
+            const clearLocalStorageButton = document.getElementById('clearLocalStorageButton');
+
+            function displayAccountData() {
+                const isLoggedIn = localStorage.getItem('isUserLoggedIn');
+                const userName = localStorage.getItem('loggedInUserName');
+                const userRole = localStorage.getItem('userRole');
+                const userPasswordDemo = localStorage.getItem('demoUserPassword') || "(Password tidak disimpan/ditampilkan untuk demo ini)";
+
+                accountDataContainer.innerHTML = ''; 
+
+                if (isLoggedIn === 'true') {
+                    accountDataContainer.innerHTML += `
+                        <div class="data-item">
+                            <span class="data-label">Status Login:</span>
+                            <span class="data-value text-green-400">Logged In</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Nama Pengguna:</span>
+                            <span class="data-value">${userName || 'Tidak ada data'}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Peran Pengguna:</span>
+                            <span class="data-value">${userRole || 'Tidak ada data'}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Password (Demo - JANGAN DILAKUKAN DI PRODUKSI!):</span>
+                            <span class="data-value">${userPasswordDemo}</span>
+                        </div>
+                    `;
+                } else {
+                    accountDataContainer.innerHTML = '<p class="text-center text-gray-400">Tidak ada pengguna yang sedang login (localStorage kosong atau isUserLoggedIn bukan true).</p>';
+                }
+                let allStorageHTML = '<h2 class="text-lg font-semibold mt-6 mb-3 text-gray-300 border-t border-gray-700 pt-3">Semua Data di localStorage:</h2>';
+                if (localStorage.length > 0) {
+                    allStorageHTML += '<ul class="list-disc list-inside text-sm">';
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        const value = localStorage.getItem(key);
+                        allStorageHTML += `<li class="mb-1"><strong class="text-gray-400">${key}:</strong> ${value}</li>`;
+                    }
+                    allStorageHTML += '</ul>';
+                } else {
+                    allStorageHTML += '<p class="text-gray-400">localStorage kosong.</p>';
+                }
+                accountDataContainer.innerHTML += allStorageHTML;
+            }
+
+            // localStorage.setItem('demoUserPassword', signupPasswordInput.value);
+
+            if (clearLocalStorageButton) {
+                clearLocalStorageButton.addEventListener('click', function() {
+                    if (confirm('Apakah Anda yakin ingin menghapus semua data akun demo dari localStorage? Ini akan me-logout Anda dan menghapus peran serta nama pengguna yang tersimpan.')) {
+                        localStorage.removeItem('isUserLoggedIn');
+                        localStorage.removeItem('loggedInUserName');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('demoUserPassword'); 
+                        alert('Data akun demo telah dihapus dari localStorage.');
+                        displayAccountData(); 
+                    }
+                });
+            }
+
+            displayAccountData();
+        });
+    </script>
+</body>
+</html>

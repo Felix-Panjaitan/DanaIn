@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Investor - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0F2138; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #1E2D3D; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E4C5B; }
+
+        .sidebar {
+            background-color: #0F2138;
+            border-right: 1px solid #1E2D3D;
+        }
+        .sidebar-link {
+            color: #A8B2D1;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #1E2D3D;
+            color: #64FFDA;
+            border-left: 3px solid #64FFDA;
+            padding-left: calc(1.5rem - 3px);
+        }
+        .sidebar-link.active i { color: #64FFDA; }
+        .sidebar-link i { color: #A8B2D1; transition: color 0.2s ease; }
+        .sidebar-link:hover i { color: #64FFDA; }
+        
+        .btn-primary-accent {
+            background-color: #64FFDA;
+            color: #0A192F;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-primary-accent:hover {
+            background-color: #52D3C8;
+            transform: translateY(-1px);
+        }
+        .category-filter-btn {
+            background-color: #102A43;
+            color: #A8B2D1;
+            border: 1px solid #1E2D3D;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem; 
+            border-radius: 0.5rem; 
+            font-size: 0.875rem; 
+        }
+        .category-filter-btn:hover, .category-filter-btn.active {
+            background-color: rgba(100, 255, 218, 0.15); 
+            color: #64FFDA;
+            border-color: #64FFDA;
+            font-weight: 500;
+        }
+        .stat-card-investor {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .section-card-investor {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .table-header-investor {
+            background-color: #0F2138;
+            color: #A8B2D1;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .table-row-investor { border-bottom: 1px solid #1E2D3D; }
+        .table-row-investor:last-child { border-bottom: none; }
+        .table-cell-investor {
+            color: #E0E6F1;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+        }
+        .main-content-area {
+            height: 100vh; 
+            overflow-y: auto; 
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        .status-aktif { background-color: rgba(74, 222, 128, 0.2); color: #4ADE80; }
+        .status-terdanai { background-color: rgba(96, 165, 250, 0.2); color: #60A5FA; }
+        .status-selesai { background-color: rgba(56, 189, 248, 0.2); color: #38BDF8; }
+        .top-project-card { 
+            background-color: #0F2138;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: box-shadow 0.3s ease;
+        }
+        .top-project-card:hover {
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+        }
+        .top-project-card img {
+            width: 60px; 
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .wishlist-item-card {
+            background-color: #0F2138;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: box-shadow 0.3s ease;
+        }
+        .wishlist-item-card:hover {
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.08);
+        }
+        .btn-remove-wishlist {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+            border: 1px solid #EF4444;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+        .btn-remove-wishlist:hover {
+            background-color: rgba(239, 68, 68, 0.2);
+        }
+        .notification-badge { 
+            background-color: #EF4444; 
+            color: white;
+            font-size: 0.7rem; 
+            font-weight: 600;
+            padding: 1px 5px; 
+            border-radius: 9999px; 
+            position: relative;
+            top: -2px; 
+        }
+    </style>
+</head>
+<body class="flex antialiased">
+
+    <aside class="sidebar w-64 min-h-screen flex-shrink-0 flex flex-col fixed top-0 left-0 z-40 lg:relative lg:translate-x-0 transform -translate-x-full lg:transition-none transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="h-20 flex items-center justify-center px-6 border-b border-gray-700">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+        </div>
+        <nav class="flex-grow pt-6">
+            <a href="dashboard-investor.html" class="sidebar-link active flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-tachometer-alt w-5 h-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#investasi-saya-section" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-wallet w-5 h-5"></i>
+                <span>Investasi Saya</span>
+            </a>
+            <a href="#proyek-disimpan-section" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-bookmark w-5 h-5"></i>
+                <span>Proyek Disimpan</span>
+            </a>
+            <a href="contact-creator-placeholder.html" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-headset w-5 h-5"></i>
+                <span>Hubungi Kreator</span>
+            </a>
+            <a href="pengaturan-akun.html" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-cog w-5 h-5"></i>
+                <span>Pengaturan Akun</span>
+            </a>
+            <a href="edit-profil.html" class="sidebar-link flex items-center space-x-3 px-6 py-3">
+                <i class="fas fa-user-edit w-5 h-5"></i>
+                <span>Edit Profil</span>
+            </a>
+            <a href="notifikasi.html" id="sidebarNotifLinkInvestor" class="sidebar-link flex items-center justify-between px-6 py-3">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-bell w-5 h-5"></i>
+                    <span>Notifikasi</span>
+                </div>
+                 <span id="sidebarNotificationBadgeInvestor" class="notification-badge hidden">0</span>
+            </a>
+        </nav>
+        <div class="px-6 py-4 border-t border-gray-700 mt-auto">
+            <a href="daftar-proyek.html" class="btn-primary-accent w-full flex items-center justify-center py-2.5 rounded-lg font-semibold text-sm mb-4">
+                <i class="fas fa-search-dollar mr-2"></i>Cari Proyek
+            </a>
+            <div class="flex items-center space-x-3 pt-2">
+                <img id="userAvatarSidebar" src="https://placehold.co/40x40/0A192F/64FFDA?text=I" alt="Avatar Investor" class="w-10 h-10 rounded-full border-2 border-gray-600">
+                <div>
+                    <p id="userNameSidebar" class="text-sm font-semibold text-gray-200">Nama Investor</p>
+                    <a href="#" id="logoutButtonSidebar" class="text-xs text-gray-500 hover:text-red-400 transition-colors">Logout</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+    
+    <button id="sidebarToggle" class="lg:hidden fixed top-5 left-5 z-50 p-2 rounded-md bg-gray-800 text-white">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="flex-1 flex flex-col main-content-area">
+        <main class="flex-grow p-6 md:p-8 lg:p-10">
+            <div id="dashboardContentInvestor" class="opacity-0 transition-opacity duration-500 ease-in-out">
+                <h1 id="welcomeMessageInvestor" class="text-3xl md:text-4xl font-bold text-gray-100 mb-6">Welcome Back, Name!</h1>
+                <section class="mb-8 flex flex-wrap gap-3 items-center" id="categoryFilters">
+                    <button data-kategori="Semua" class="category-filter-btn active">Semua</button>
+                    <button data-kategori="Kesehatan" class="category-filter-btn">Kesehatan</button>
+                    <button data-kategori="Olahraga" class="category-filter-btn">Olahraga</button>
+                    <button data-kategori="Teknologi" class="category-filter-btn">Teknologi</button>
+                    <button data-kategori="Pendidikan" class="category-filter-btn">Pendidikan</button>
+                    <a href="daftar-proyek.html" class="text-sm text-gray-400 hover:text-gray-200 ml-auto">lihat semua <i class="fas fa-arrow-right text-xs"></i></a>
+                </section>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <section class="section-card-investor">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Ringkasan Kinerja Investasi</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="text-center p-4 bg-gray-800 rounded-lg"><p class="text-sm text-gray-400">Total Dana Diinvestasikan</p><p id="totalInvestmentAmount" class="text-2xl font-bold text-green-400 mt-1">Rp 0</p></div>
+                                <div class="text-center p-4 bg-gray-800 rounded-lg"><p class="text-sm text-gray-400">Proyek Diinvestasikan</p><p id="totalInvestedProjectsSummary" class="text-2xl font-bold text-blue-400 mt-1">0</p></div>
+                                <div class="text-center p-4 bg-gray-800 rounded-lg"><p class="text-sm text-gray-400">Estimasi Keuntungan</p><p class="text-2xl font-bold text-yellow-400 mt-1">Rp 0 <span class="text-xs">(Simulasi)</span></p></div>
+                            </div>
+                             <p class="text-xs text-gray-500 mt-4 text-center">*Data kinerja adalah simulasi.</p>
+                        </section>
+                        <section class="section-card-investor" id="investasi-saya-section">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Investasi Saya</h2>
+                            <div class="overflow-x-auto"><table class="min-w-full"><thead class="table-header-investor"><tr><th class="table-cell-investor text-left">Nama Proyek</th><th class="table-cell-investor text-right">Jumlah Investasi</th><th class="table-cell-investor text-left">Status Proyek</th><th class="table-cell-investor text-left">Tanggal Investasi</th><th class="table-cell-investor text-center">Aksi</th></tr></thead><tbody id="myInvestmentsTableBody"><tr><td colspan="5" id="loadingMyInvestments" class="table-cell-investor text-center text-gray-400 py-8">Memuat...</td></tr></tbody></table></div>
+                            <div id="noMyInvestments" class="hidden text-center text-gray-400 py-8 px-5"><i class="fas fa-search-dollar text-3xl mb-3"></i><p>Anda belum berinvestasi. <a href="daftar-proyek.html" class="text-blue-400 hover:underline">Cari proyek!</a></p></div>
+                        </section>
+                        
+                        <section class="section-card-investor" id="proyek-disimpan-section">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Proyek Disimpan (Wishlist)</h2>
+                            <div id="wishlistedProjectsContainer" class="space-y-4">
+                                <p id="loadingWishlist" class="text-gray-400">Memuat proyek disimpan...</p>
+                            </div>
+                            <div id="noWishlistedProjects" class="hidden text-center text-gray-400 py-8">
+                                <i class="far fa-bookmark text-3xl mb-3"></i>
+                                <p>Anda belum menyimpan proyek. <a href="daftar-proyek.html" class="text-blue-400 hover:underline">Telusuri proyek!</a></p>
+                            </div>
+                        </section>
+                    </div>
+                    <aside class="lg:col-span-1 space-y-6">
+                        <div class="stat-card-investor"><div class="flex justify-between items-start"><div><p class="text-sm text-gray-400 uppercase tracking-wider">Total Proyek Diinvestasikan</p><p id="statTotalInvested" class="text-3xl font-bold text-gray-100 mt-1">0</p></div><div class="p-2.5 rounded-lg bg-gray-700"><i class="fas fa-donate text-xl text-blue-400"></i></div></div><p id="statTotalInvestedChange" class="text-xs text-gray-500 mt-3">+0 vs bulan lalu</p></div>
+                        <div class="stat-card-investor"><div class="flex justify-between items-start"><div><p class="text-sm text-gray-400 uppercase tracking-wider">Rata-Rata Progres Dana Proyek</p><p id="statAvgFundProgress" class="text-3xl font-bold text-gray-100 mt-1">0%</p></div><div class="p-2.5 rounded-lg bg-gray-700"><i class="fas fa-percent text-xl text-green-400"></i></div></div><p id="statAvgFundProgressChange" class="text-xs text-gray-500 mt-3">+0.0% vs bulan lalu</p></div>
+                        <div class="section-card-investor"><h3 class="text-lg font-semibold text-gray-100 mb-3">Proyek Unggulan</h3><div id="topProjectsListInvestor" class="space-y-3"><p class="text-gray-400 text-sm">Memuat...</p></div></div>
+                    </aside>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const topPlatformProjectsData = [ 
+            { id: 2, namaProyek: 'Kopi Organik Desa Lestari', targetDana: 120000000, gambarProyek: 'https://placehold.co/80x80/0F2138/64FFDA?text=Kopi' },
+            { id: 4, namaProyek: 'MindWell App', targetDana: 180000000, gambarProyek: 'https://placehold.co/80x80/0F2138/64FFDA?text=Mind' },
+            { id: 8, namaProyek: 'EcoResidences Bali', targetDana: 1200000000, gambarProyek: 'https://placehold.co/80x80/0F2138/64FFDA?text=Bali' }
+        ];
+        const semuaProyekDataUntukWishlist = [ 
+            { id: 1, namaProyek: 'EduTech AI Masa Depan', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Edu', kategori: 'Teknologi' },
+            { id: 2, namaProyek: 'Kopi Organik Desa Lestari', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Kopi', kategori: 'Pertanian' },
+            { id: 3, namaProyek: 'Fashion Ramah Lingkungan', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Eco', kategori: 'Fashion' },
+            { id: 4, namaProyek: 'Aplikasi Kesehatan Mental Terpadu', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Mind', kategori: 'Kesehatan' },
+            { id: 5, namaProyek: 'Rumah Belajar Anak Pesisir', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Edu2', kategori: 'Pendidikan' },
+            { id: 6, namaProyek: 'Energi Terbarukan Komunitas', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Energi', kategori: 'Sosial' },
+            { id: 7, namaProyek: 'Startup Agrikultur Cerdas', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Agro', kategori: 'Teknologi' },
+            { id: 8, namaProyek: 'Pengembangan Properti Hijau', gambarProyek: 'https://placehold.co/60x60/0F2138/64FFDA?text=Prop', kategori: 'Properti' }
+        ];
+
+        function formatRupiah(angka) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka); }
+        function getStatusBadgeClass(status) {
+            if (!status) return 'status-draf';
+            switch (status.toLowerCase()) {
+                case 'pendanaan aktif': return 'status-aktif';
+                case 'terdanai': return 'status-terdanai';
+                case 'selesai': return 'status-selesai';
+                default: return 'status-draf';
+            }
+        }
+
+        function renderInvestmentRow(investasi) {
+            const statusBadgeClass = getStatusBadgeClass(investasi.statusProyekSaatInvestasi);
+            return `
+                <tr class="table-row-investor hover:bg-gray-800 transition-colors">
+                    <td class="table-cell-investor"><a href="detail-proyek.html?id=${investasi.projectId}" class="hover:text-gray-300 font-medium">${investasi.projectName}</a></td>
+                    <td class="table-cell-investor text-right">${formatRupiah(investasi.amountInvested)}</td>
+                    <td class="table-cell-investor"><span class="status-badge ${statusBadgeClass}">${investasi.statusProyekSaatInvestasi}</span></td>
+                    <td class="table-cell-investor">${new Date(investasi.investmentDate).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'})}</td>
+                    <td class="table-cell-investor text-center"><a href="detail-proyek.html?id=${investasi.projectId}" title="Lihat Detail Proyek" class="text-blue-400 hover:text-blue-300"><i class="fas fa-eye"></i></a></td>
+                </tr>
+            `;
+        }
+        function renderTopProjectCardInvestor(proyek) {
+            return `
+                <a href="detail-proyek.html?id=${proyek.id}" class="top-project-card block">
+                    <img src="${proyek.gambarProyek}" alt="${proyek.namaProyek}" onerror="this.onerror=null;this.src='https://placehold.co/80x80/0F2138/1E2D3D?text=Error';">
+                    <div><h4 class="font-medium text-gray-200 text-sm leading-tight">${proyek.namaProyek}</h4><p class="text-xs text-gray-400">Target: ${formatRupiah(proyek.targetDana)}</p></div>
+                </a>
+            `;
+        }
+        function renderWishlistedProjectCard(proyek) {
+            return `
+                <div class="wishlist-item-card">
+                    <div class="flex items-center gap-3">
+                        <img src="${proyek.gambarProyek || 'https://placehold.co/60x60/0F2138/1E2D3D?text=Img'}" alt="${proyek.namaProyek}" class="w-12 h-12 object-cover rounded-md">
+                        <div>
+                            <a href="detail-proyek.html?id=${proyek.id}" class="font-semibold text-gray-100 hover:text-gray-300 text-sm leading-tight">${proyek.namaProyek}</a>
+                            <p class="text-xs text-gray-400">${proyek.kategori || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <button class="btn-remove-wishlist" data-project-id="${proyek.id}" title="Hapus dari Wishlist">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        }
+        
+        function updateNotificationBadgeInSidebarInvestor() {
+            const sidebarNotificationBadge = document.getElementById('sidebarNotificationBadgeInvestor');
+            if (!sidebarNotificationBadge) return;
+
+            const notifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
+            const investorNotifications = notifications.filter(n => 
+                n.type === 'new_update' ||
+                n.type === 'new_investment_startup' || 
+                n.type === 'general' || 
+                (n.type === 'project_funded' && wishlistedProjectIds.includes(n.projectId)) 
+            );
+            const unreadCount = investorNotifications.filter(n => !n.isRead).length;
+
+            if (unreadCount > 0) {
+                sidebarNotificationBadge.textContent = unreadCount;
+                sidebarNotificationBadge.classList.remove('hidden');
+            } else {
+                sidebarNotificationBadge.classList.add('hidden');
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dashboardContent = document.getElementById('dashboardContentInvestor');
+            const welcomeMessage = document.getElementById('welcomeMessageInvestor');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Investor Hebat"; 
+            const userRole = localStorage.getItem('userRole');
+
+            if (isUserLoggedIn !== 'true' || userRole !== 'investor') {
+                const redirectParam = userRole !== 'investor' && isUserLoggedIn === 'true' 
+                                    ? (userRole === 'startup' ? 'dashboard-startup.html' : 'index.html') 
+                                    : `auth.html#login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+                if (userRole !== 'investor' && isUserLoggedIn === 'true') {
+                    alert("Hanya investor yang dapat mengakses dashboard ini. Anda akan diarahkan.");
+                }
+                window.location.href = redirectParam;
+                return;
+            }
+            
+            dashboardContent.classList.remove('opacity-0');
+            dashboardContent.style.opacity = '1';
+            if(welcomeMessage) welcomeMessage.textContent = `Welcome Back, ${loggedInUserName}!`;
+
+            const userNameSidebar = document.getElementById('userNameSidebar');
+            if(userNameSidebar) userNameSidebar.textContent = loggedInUserName;
+            const logoutButtonSidebar = document.getElementById('logoutButtonSidebar');
+            if(logoutButtonSidebar) {
+                logoutButtonSidebar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                     ['isUserLoggedIn', 'loggedInUserName', 'userRole', 'demoUserEmail', 
+                         'demoUserPassword', 'demoUserUsername', 'notificationPreferences', 
+                         'myProjects', 'myInvestments', 'wishlistedProjects', 'userNotifications'].forEach(item => localStorage.removeItem(item));
+                    window.location.href = 'index.html';
+                });
+            }
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() { sidebar.classList.toggle('-translate-x-full'); });
+                document.addEventListener('click', function(event) {
+                    if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                });
+            }
+             document.querySelectorAll('aside a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (window.innerWidth < 1024 && sidebar) { sidebar.classList.add('-translate-x-full'); }
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        document.querySelector('.main-content-area').scrollTo({ top: targetElement.offsetTop - 20, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            const myInvestments = JSON.parse(localStorage.getItem('myInvestments')) || [];
+
+            const totalInvestmentAmountEl = document.getElementById('totalInvestmentAmount');
+            const totalInvestedProjectsSummaryEl = document.getElementById('totalInvestedProjectsSummary');
+            let totalInvestedVal = 0;
+            myInvestments.forEach(inv => totalInvestedVal += inv.amountInvested);
+            if(totalInvestmentAmountEl) totalInvestmentAmountEl.textContent = formatRupiah(totalInvestedVal);
+            if(totalInvestedProjectsSummaryEl) totalInvestedProjectsSummaryEl.textContent = myInvestments.length;
+
+            const statTotalInvestedEl = document.getElementById('statTotalInvested');
+            const statAvgFundProgressEl = document.getElementById('statAvgFundProgress');
+            if(statTotalInvestedEl) statTotalInvestedEl.textContent = myInvestments.length;
+            if(statAvgFundProgressEl) statAvgFundProgressEl.textContent = `${myInvestments.length > 0 ? Math.floor(Math.random() * 40) + 30 : 0}%`; 
+            if(document.getElementById('statTotalInvestedChange')) document.getElementById('statTotalInvestedChange').innerHTML = `<i class="fas fa-history text-blue-400 mr-1"></i> Berdasarkan investasi Anda`;
+            if(document.getElementById('statAvgFundProgressChange')) document.getElementById('statAvgFundProgressChange').innerHTML = `<i class="fas fa-info-circle text-gray-500 mr-1"></i> Estimasi platform`;
+
+            const topProjectsListEl = document.getElementById('topProjectsListInvestor');
+            if(topProjectsListEl) {
+                topProjectsListEl.innerHTML = '';
+                if(topPlatformProjectsData.length > 0){
+                    topPlatformProjectsData.slice(0,3).forEach(proj => {
+                        topProjectsListEl.innerHTML += renderTopProjectCardInvestor(proj);
+                    });
+                } else {
+                    topProjectsListEl.innerHTML = '<p class="text-gray-400 text-sm">Tidak ada proyek unggulan.</p>';
+                }
+            }
+
+            const myInvestmentsTableBodyEl = document.getElementById('myInvestmentsTableBody');
+            const loadingMyInvestmentsEl = document.getElementById('loadingMyInvestments');
+            const noMyInvestmentsEl = document.getElementById('noMyInvestments');
+
+            if (myInvestmentsTableBodyEl && loadingMyInvestmentsEl && noMyInvestmentsEl) {
+                myInvestmentsTableBodyEl.innerHTML = '';
+                if (myInvestments.length > 0) {
+                    myInvestments.forEach(inv => {
+                        myInvestmentsTableBodyEl.innerHTML += renderInvestmentRow(inv);
+                    });
+                    if(loadingMyInvestmentsEl.parentElement) loadingMyInvestmentsEl.parentElement.removeChild(loadingMyInvestmentsEl);
+                    noMyInvestmentsEl.classList.add('hidden');
+                } else {
+                    if(loadingMyInvestmentsEl.parentElement) loadingMyInvestmentsEl.parentElement.removeChild(loadingMyInvestmentsEl);
+                    noMyInvestmentsEl.classList.remove('hidden');
+                }
+            }
+            
+            const wishlistedProjectsContainer = document.getElementById('wishlistedProjectsContainer');
+            const loadingWishlist = document.getElementById('loadingWishlist');
+            const noWishlistedProjects = document.getElementById('noWishlistedProjects');
+            let wishlistedProjectIds = JSON.parse(localStorage.getItem('wishlistedProjects')) || [];
+
+            function loadWishlistedProjects() {
+                if (!wishlistedProjectsContainer || !loadingWishlist || !noWishlistedProjects) return;
+                wishlistedProjectsContainer.innerHTML = ''; 
+                const wishlistedProjectDetails = [];
+                if (wishlistedProjectIds.length > 0) {
+                    wishlistedProjectIds.forEach(id => {
+                        const projectDetail = semuaProyekDataUntukWishlist.find(p => p.id === id) || (JSON.parse(localStorage.getItem('myProjects')) || []).find(p => p.id === id);
+                        if (projectDetail) { wishlistedProjectDetails.push(projectDetail); }
+                    });
+                }
+                if (wishlistedProjectDetails.length > 0) {
+                    wishlistedProjectDetails.forEach(proj => { wishlistedProjectsContainer.innerHTML += renderWishlistedProjectCard(proj); });
+                    loadingWishlist.classList.add('hidden');
+                    noWishlistedProjects.classList.add('hidden');
+                } else {
+                    loadingWishlist.classList.add('hidden');
+                    noWishlistedProjects.classList.remove('hidden');
+                }
+                wishlistedProjectsContainer.querySelectorAll('.btn-remove-wishlist').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const projectIdToRemove = parseInt(this.dataset.projectId);
+                        wishlistedProjectIds = wishlistedProjectIds.filter(id => id !== projectIdToRemove);
+                        localStorage.setItem('wishlistedProjects', JSON.stringify(wishlistedProjectIds));
+                        loadWishlistedProjects(); 
+                        alert(`Proyek ID ${projectIdToRemove} dihapus dari wishlist.`);
+                    });
+                });
+            }
+            loadWishlistedProjects();
+
+            document.querySelectorAll('.category-filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.category-filter-btn').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            updateNotificationBadgeInSidebarInvestor();
+        });
+    </script>
+</body>
+</html>

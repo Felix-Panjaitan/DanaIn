@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Proyek - DANAIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A192F;
+            color: #E0E6F1;
+        }
+        .top-navbar {
+            background-color: #0A192F; 
+            border-bottom: 1px solid #1E2D3D; 
+            height: 4.5rem; 
+        }
+        .top-navbar-link { color: #A8B2D1; transition: color 0.2s ease; }
+        .top-navbar-link:hover, .top-navbar-link.active { color: #64FFDA; }
+        .top-navbar-link.active { font-weight: 600; }
+
+        .btn-primary {
+            background-color: #64FFDA; 
+            color: #0A192F; 
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #52D3C8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+        .btn-secondary { 
+            background-color: #1E2D3D;
+            color: #A8B2D1;
+            border: 1px solid #3E4C5B;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #3E4C5B;
+            border-color: #64FFDA;
+            color: #64FFDA;
+        }
+        .footer-bg {
+            background-color: #081424; 
+            border-top: 1px solid #1E2D3D;
+        }
+        .form-section {
+            background-color: #102A43;
+            border: 1px solid #1E2D3D;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .form-label {
+            display: block;
+            color: #A8B2D1;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #0A192F; 
+            border: 1px solid #3E4C5B; 
+            border-radius: 6px; 
+            color: #E0E6F1; 
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #64FFDA; 
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+        }
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .error-message {
+            color: #ff9090; 
+            font-size: 0.75rem;
+            margin-top: 4px;
+            display: none;
+        }
+        .form-input.error, .form-textarea.error {
+            border-color: #ff7575;
+        }
+        .update-item {
+            background-color: #0F2138;
+            border: 1px solid #1E2D3D;
+            border-left-width: 4px;
+            border-left-color: #64FFDA;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .success-popup {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #102A43;
+            color: #64FFDA;
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid #64FFDA;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+        }
+        .success-popup.show {
+            opacity: 1;
+            visibility: visible;
+            top: 30px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="successPopup" class="success-popup">Update berhasil diposting!</div>
+
+    <header class="top-navbar sticky top-0 z-50">
+        <nav class="container mx-auto px-6 h-full flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-extrabold" style="color: #64FFDA;">DANAIN</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="daftar-proyek.html" class="top-navbar-link">Telusuri Proyek</a>
+                <a href="dashboard-startup.html" id="dashboardLink" class="top-navbar-link active">Dashboard Saya</a>
+                <div id="topNavUserSectionDesktop" class="hidden items-center"></div>
+                <div id="topNavAuthLinksDesktop" class="flex items-center space-x-4">
+                     <a href="auth.html#login" class="btn-secondary px-4 py-2 rounded-md text-sm">Masuk</a>
+                     <a href="auth.html#signup" class="btn-primary px-4 py-2 rounded-md text-sm font-semibold">Daftar</a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="topMobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="topMobileMenu" class="md:hidden hidden bg-gray-800 bg-opacity-95 absolute right-0 mt-1 py-2 w-48 rounded-md shadow-lg">
+            <a href="daftar-proyek.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Telusuri Proyek</a>
+            <a href="dashboard-startup.html" id="mobileDashboardLink" class="block px-4 py-2 text-sm text-gray-100 bg-gray-700 font-semibold">Dashboard Saya</a>
+            <div id="topNavUserSectionMobile" class="hidden border-t border-gray-700 mt-2 pt-2"></div>
+            <div id="topNavAuthLinksMobile" class="border-t border-gray-700 mt-2 pt-2">
+                <a href="auth.html#login" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Masuk</a>
+                <a href="auth.html#signup" class="block mx-4 my-2 px-4 py-2 btn-primary text-center rounded-md text-sm font-semibold">Daftar</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <div id="manageProjectContent" class="opacity-0 transition-opacity duration-500 ease-in-out">
+            <div class="mb-8 md:mb-12">
+                 <a href="dashboard-startup.html" class="inline-flex items-center text-sm text-blue-400 hover:text-blue-300 mb-4">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+                </a>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-100">Kelola Proyek: <span id="managedProjectName" class="text-gray-300">Memuat...</span></h1>
+                <p class="text-lg text-gray-400 mt-2">Tambahkan update perkembangan untuk investor Anda.</p>
+            </div>
+
+            <div id="projectNotFoundMessageManage" class="hidden form-section text-center">
+                <i class="fas fa-exclamation-triangle text-4xl text-yellow-400 mb-4"></i>
+                <p class="text-xl text-gray-200">Proyek tidak ditemukan atau Anda tidak memiliki izin untuk mengelolanya.</p>
+            </div>
+
+            <div id="projectManagementUI" class="hidden">
+                <section class="form-section">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Tambah Update Baru</h2>
+                    <form id="addUpdateForm" novalidate>
+                        <input type="hidden" id="updateProjectId">
+                        <div class="mb-6">
+                            <label for="updateTitle" class="form-label">Judul Update <span class="text-red-500">*</span></label>
+                            <input type="text" id="updateTitle" name="updateTitle" class="form-input" placeholder="Contoh: Milestone Pencapaian Tahap 1" required>
+                            <p class="error-message"></p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="updateDescription" class="form-label">Deskripsi Update <span class="text-red-500">*</span></label>
+                            <textarea id="updateDescription" name="updateDescription" class="form-textarea" placeholder="Jelaskan perkembangan terbaru proyek Anda..." required></textarea>
+                            <p class="error-message"></p>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn-primary px-6 py-2.5 rounded-md font-semibold">Posting Update</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="form-section mt-10">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-6 border-b border-gray-700 pb-3">Update Sebelumnya</h2>
+                    <div id="previousUpdatesList">
+                        <p id="noUpdatesMessage" class="text-gray-400">Belum ada update untuk proyek ini.</p>
+                        </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-bg text-gray-400 py-12 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>© <span id="currentYearFooter"></span> DANAIN. Semua Hak Cipta Dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const manageProjectContent = document.getElementById('manageProjectContent');
+            const successPopup = document.getElementById('successPopup');
+            const addUpdateForm = document.getElementById('addUpdateForm');
+            const projectNotFoundMessage = document.getElementById('projectNotFoundMessageManage');
+            const projectManagementUI = document.getElementById('projectManagementUI');
+            const managedProjectNameSpan = document.getElementById('managedProjectName');
+            const previousUpdatesListDiv = document.getElementById('previousUpdatesList');
+            const noUpdatesMessageP = document.getElementById('noUpdatesMessage');
+            const updateProjectIdInput = document.getElementById('updateProjectId');
+
+            const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
+            const loggedInUserName = localStorage.getItem('loggedInUserName') || "Pengguna"; 
+            const userRole = localStorage.getItem('userRole');
+
+            const topNavAuthLinksDesktop = document.getElementById('topNavAuthLinksDesktop');
+            const topNavUserSectionDesktop = document.getElementById('topNavUserSectionDesktop');
+            const topNavAuthLinksMobile = document.getElementById('topNavAuthLinksMobile');
+            const topNavUserSectionMobile = document.getElementById('topNavUserSectionMobile');
+            const dashboardLink = document.getElementById('dashboardLink');
+            const mobileDashboardLink = document.getElementById('mobileDashboardLink');
+            
+            const dashboardUrl = userRole === 'investor' ? 'dashboard-investor.html' : 'dashboard-startup.html';
+            if(dashboardLink) dashboardLink.href = dashboardUrl;
+            if(mobileDashboardLink) mobileDashboardLink.href = dashboardUrl;
+
+            if (isUserLoggedIn !== 'true') {
+                window.location.href = `auth.html#login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+                return; 
+            }
+            if (userRole !== 'startup') {
+                 alert("Hanya pengelola proyek yang dapat mengakses halaman ini. Anda akan diarahkan ke dashboard Anda.");
+                 window.location.href = dashboardUrl;
+                 return;
+            }
+
+            manageProjectContent.classList.remove('opacity-0');
+            manageProjectContent.style.opacity = '1';
+
+            if (isUserLoggedIn === 'true') {
+                if(topNavAuthLinksDesktop) topNavAuthLinksDesktop.style.display = 'none';
+                if(topNavUserSectionDesktop) {
+                    topNavUserSectionDesktop.innerHTML = `<a href="${dashboardUrl}" class="top-navbar-link mr-4 text-sm">Dashboard</a> <span class="top-navbar-link mr-3 text-sm">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopDesktop" class="btn-secondary px-3 py-1.5 rounded-md text-xs">Logout</a>`;
+                    topNavUserSectionDesktop.classList.remove('hidden');
+                    topNavUserSectionDesktop.classList.add('flex', 'items-center');
+                    setupLogoutButton('logoutButtonTopDesktop');
+                }
+                if(topNavAuthLinksMobile) topNavAuthLinksMobile.style.display = 'none';
+                if(topNavUserSectionMobile) {
+                    topNavUserSectionMobile.innerHTML = `<a href="${dashboardUrl}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Dashboard</a><span class="block px-4 py-2 text-sm text-gray-300">Halo, ${loggedInUserName}!</span><a href="#" id="logoutButtonTopMobile" class="block mx-4 my-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-center rounded-md text-sm font-semibold">Logout</a>`;
+                    topNavUserSectionMobile.classList.remove('hidden');
+                     setupLogoutButton('logoutButtonTopMobile');
+                }
+            }
+            
+            function setupLogoutButton(buttonId) {
+                const logoutButton = document.getElementById(buttonId);
+                if (logoutButton) {
+                    logoutButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('isUserLoggedIn');
+                        localStorage.removeItem('loggedInUserName');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('demoUserEmail');
+                        localStorage.removeItem('demoUserPassword');
+                        localStorage.removeItem('demoUserUsername');
+                        window.location.href = 'index.html';
+                    });
+                }
+            }
+
+            const topMobileMenuButton = document.getElementById('topMobileMenuButton');
+            const topMobileMenu = document.getElementById('topMobileMenu');
+            if(topMobileMenuButton && topMobileMenu) {
+                topMobileMenuButton.addEventListener('click', function() { topMobileMenu.classList.toggle('hidden'); });
+                 document.addEventListener('click', function(event) {
+                    if (!topMobileMenuButton.contains(event.target) && !topMobileMenu.contains(event.target)) {
+                        topMobileMenu.classList.add('hidden');
+                    }
+                });
+            }
+            
+            const currentYearFooter = document.getElementById('currentYearFooter');
+            if(currentYearFooter) currentYearFooter.textContent = new Date().getFullYear();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectIdToManage = parseInt(urlParams.get('id'));
+            let myProjects = JSON.parse(localStorage.getItem('myProjects')) || [];
+            const projectToManage = myProjects.find(p => p.id === projectIdToManage);
+
+            if (projectToManage) {
+                projectManagementUI.classList.remove('hidden');
+                projectNotFoundMessage.classList.add('hidden');
+                if(managedProjectNameSpan) managedProjectNameSpan.textContent = projectToManage.projectName || 'Proyek Tanpa Nama';
+                if(updateProjectIdInput) updateProjectIdInput.value = projectIdToManage;
+                renderUpdates(projectToManage.updates || []);
+            } else {
+                projectManagementUI.classList.add('hidden');
+                projectNotFoundMessage.classList.remove('hidden');
+            }
+
+            function renderUpdates(updatesArray) {
+                previousUpdatesListDiv.innerHTML = ''; 
+                if (updatesArray.length > 0) {
+                    noUpdatesMessageP.classList.add('hidden');
+                    updatesArray.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                    updatesArray.forEach(update => {
+                        const updateElement = document.createElement('div');
+                        updateElement.className = 'update-item';
+                        updateElement.innerHTML = `
+                            <p class="text-xs text-gray-500 mb-1">${new Date(update.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                            <h4 class="font-semibold text-gray-200 mb-1">${update.judul}</h4>
+                            <p class="text-sm text-gray-300 whitespace-pre-line">${update.deskripsi}</p>
+                        `;
+                        previousUpdatesListDiv.appendChild(updateElement);
+                    });
+                } else {
+                    noUpdatesMessageP.classList.remove('hidden');
+                }
+            }
+
+            const updateTitleInput = document.getElementById('updateTitle');
+            const updateDescriptionInput = document.getElementById('updateDescription');
+
+            function validateUpdateField(field) {
+                let isValid = true;
+                const errorDisplay = field.parentElement.querySelector('.error-message');
+                field.classList.remove('error');
+                if(errorDisplay) errorDisplay.style.display = 'none';
+
+                if (field.value.trim() === '') {
+                    isValid = false;
+                    field.classList.add('error');
+                    if(errorDisplay) {
+                        errorDisplay.textContent = "Kolom ini wajib diisi.";
+                        errorDisplay.style.display = 'block';
+                    }
+                }
+                return isValid;
+            }
+            
+            [updateTitleInput, updateDescriptionInput].forEach(input => {
+                if(input) { 
+                    input.addEventListener('blur', () => validateUpdateField(input));
+                    input.addEventListener('input', () => {
+                        if(input.classList.contains('error')){
+                            input.classList.remove('error');
+                            const errorDisplay = input.parentElement.querySelector('.error-message');
+                            if(errorDisplay) errorDisplay.style.display = 'none';
+                        }
+                    });
+                }
+            });
+
+
+            if (addUpdateForm) {
+                addUpdateForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    let isFormValid = true;
+                    if(!validateUpdateField(updateTitleInput)) isFormValid = false;
+                    if(!validateUpdateField(updateDescriptionInput)) isFormValid = false;
+
+                    if (isFormValid && projectToManage) {
+                        const newUpdate = {
+                            tanggal: new Date().toISOString(),
+                            judul: updateTitleInput.value.trim(),
+                            deskripsi: updateDescriptionInput.value.trim()
+                        };
+
+                        if (!projectToManage.updates) {
+                            projectToManage.updates = [];
+                        }
+                        projectToManage.updates.push(newUpdate);
+
+                        const projectIndex = myProjects.findIndex(p => p.id === projectIdToManage);
+                        if (projectIndex > -1) {
+                            myProjects[projectIndex] = projectToManage;
+                            localStorage.setItem('myProjects', JSON.stringify(myProjects));
+                        }
+                        
+                        console.log('Update Baru Ditambahkan:', newUpdate);
+                        if(successPopup) {
+                            successPopup.textContent = 'Update berhasil diposting!';
+                            successPopup.classList.add('show');
+                            setTimeout(() => {
+                                successPopup.classList.remove('show');
+                            }, 2000);
+                        }
+                        
+                        addUpdateForm.reset(); 
+                        renderUpdates(projectToManage.updates); 
+
+                    } else if (!projectToManage) {
+                        alert('Gagal memposting: Proyek tidak ditemukan.');
+                    } else {
+                        // Tidak perlu 
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
