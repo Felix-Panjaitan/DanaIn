@@ -234,6 +234,9 @@ Buka file `index.html` di browser Anda atau gunakan server lokal seperti Live Se
 
 - Christian Felix Panjaitan - [GitHub](https://github.com/StuntLead)
 - Fernando Darren - [GitHub](https://github.com/Felix-Panjaitan)
+- Brainardo Kenneth Siahu
+- Putri Rizkia P. Alifuddin
+- Velicia Nissy Lonteng
 
 ## 📄 Lisensi
 
