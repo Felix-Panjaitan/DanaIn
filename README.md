@@ -11,6 +11,7 @@ DANAin adalah platform crowdfunding yang menghubungkan startup dan pengelola pro
 - [Penggunaan Aplikasi](#penggunaan-aplikasi)
 - [API Endpoints](#api-endpoints)
 - [Model Database](#model-database)
+- [Kontributor](#kontributor)
 - [Lisensi](#lisensi)
 
 ## 🌟 Fitur Utama
@@ -229,6 +230,10 @@ Buka file `index.html` di browser Anda atau gunakan server lokal seperti Live Se
 }
 ```
 
+## 👥 Kontributor
+
+- Christian Felix Panjaitan - [GitHub](https://github.com/StuntLead)
+- Fernando Darren - [GitHub](https://github.com/Felix-Panjaitan)
 
 ## 📄 Lisensi
 
