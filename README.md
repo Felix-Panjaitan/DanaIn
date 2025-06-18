@@ -230,10 +230,6 @@ Buka file `index.html` di browser Anda atau gunakan server lokal seperti Live Se
 }
 ```
 
-## 👥 Kontributor
-
-- Nama Kontributor 1 - [GitHub](https://github.com/username1)
-- Nama Kontributor 2 - [GitHub](https://github.com/username2)
 
 ## 📄 Lisensi
 
